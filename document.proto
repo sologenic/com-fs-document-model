@@ -4,14 +4,49 @@ package document;
 
 option go_package = "github.com/sologenic/com-fs-document-model;document";
 
+import "google/protobuf/timestamp.proto";
 import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
 import "sologenic/com-fs-utils-lib/models/audit/audit.proto";
 
+message Document {
+    DocumentDetails Document = 1;
+    metadata.MetaData MetaData = 2; // Network is not to be assigned (documents are network agnostic)
+    audit.Audit Audit = 3;
+}
 
-message DocumentID {
-    string DocumentID = 1;
+message DocumentDetails {
+    string DocumentID = 1; // uuid
     string OrganizationID = 2;
-    optional metadata.Network Network = 3; 
+    DocumentType DocumentType = 3;
+    string Version = 4; // Latest version of the document
+    File File = 5;
+    bool SignatureRequired = 6;
+    bool IsActive = 7;
+}
+
+message File {
+    string Reference = 1; // The reference to the file
+    string Extension = 2;
+    optional string Name = 3; // User defined name of the file, used as a "description" and not to reference the file
+}
+
+message Documents {
+    repeated Document Documents = 1; 
+    int32 Offset = 2;
+}
+
+// UserDocumentCompliance is embedded in User object to track user document compliance
+message UserDocumentCompliance {
+    repeated SignedDocument SignedDocuments = 1;
+    google.protobuf.Timestamp ComplianceCheckedAt = 2;
+    bool SigningRequired = 3; // Flag indicating if user needs to sign documents
+}
+
+message SignedDocument {
+    string DocumentID = 1;
+    string SignedVersion = 2; // The version of the document that was signed. This may differ from the current/latest version.
+    DocumentState DocumentState = 3;
+    google.protobuf.Timestamp SignedAt = 4;
 }
 
 enum DocumentType {
@@ -23,27 +58,9 @@ enum DocumentType {
     SHORT = 5;
 }
 
-message DocumentDetails {
-    string DocumentID = 1;
-    string InquiryID = 2;
-    string OrganizationID = 3;
-    string UserID = 4;
-    string FileName = 5;
-    string FileURL = 6;
-    DocumentType DocumentType = 7;
-    string Version = 8;
-    optional bool Signed = 9;
-    optional bool AdminSigned = 10; // This one might be removed later.
-    bool SignatureRequired = 11;
-}
-
-message Document {
-    DocumentDetails Document = 1;
-    metadata.MetaData MetaData = 2; 
-    audit.Audit Audit = 3;
-}
-
-message DocumentList {
-    repeated Document Documents = 1;
-    int32 Offset = 2;
+enum DocumentState {
+    NOT_USED_STATE = 0;
+    TO_BE_SIGNED = 1;
+    SIGNED = 2;
+    DISPLAY_ONLY = 3;
 }
