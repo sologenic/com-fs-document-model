@@ -14,14 +14,14 @@ message Document {
     audit.Audit Audit = 3;
 }
 
+// Key format: OrganizationID_DocumentType
 message DocumentDetails {
-    string DocumentID = 1; // uuid
-    string OrganizationID = 2;
-    DocumentType DocumentType = 3;
-    string Version = 4; // Latest version of the document
-    File File = 5;
-    bool SignatureRequired = 6;
-    bool IsActive = 7;
+    string OrganizationID = 1;
+    DocumentType DocumentType = 2;
+    string Version = 3; // Latest version of the document
+    File File = 4;
+    bool SignatureRequired = 5;
+    bool IsActive = 6;
 }
 
 message File {
@@ -43,7 +43,7 @@ message UserDocumentCompliance {
 }
 
 message SignedDocument {
-    string DocumentID = 1;
+    DocumentType DocumentType = 1;
     string SignedVersion = 2; // The version of the document that was signed. This may differ from the current/latest version.
     DocumentState DocumentState = 3;
     google.protobuf.Timestamp SignedAt = 4;

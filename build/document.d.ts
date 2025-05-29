@@ -28,9 +28,8 @@ export interface Document {
     MetaData: MetaData | undefined;
     Audit: Audit | undefined;
 }
+/** Key format: OrganizationID_DocumentType */
 export interface DocumentDetails {
-    /** uuid */
-    DocumentID: string;
     OrganizationID: string;
     DocumentType: DocumentType;
     /** Latest version of the document */
@@ -58,7 +57,7 @@ export interface UserDocumentCompliance {
     SigningRequired: boolean;
 }
 export interface SignedDocument {
-    DocumentID: string;
+    DocumentType: DocumentType;
     /** The version of the document that was signed. This may differ from the current/latest version. */
     SignedVersion: string;
     DocumentState: DocumentState;
@@ -71,7 +70,6 @@ export declare const Document: {
     toJSON(message: Document): unknown;
     create<I extends {
         Document?: {
-            DocumentID?: string | undefined;
             OrganizationID?: string | undefined;
             DocumentType?: DocumentType | undefined;
             Version?: string | undefined;
@@ -96,7 +94,6 @@ export declare const Document: {
         } | undefined;
     } & {
         Document?: ({
-            DocumentID?: string | undefined;
             OrganizationID?: string | undefined;
             DocumentType?: DocumentType | undefined;
             Version?: string | undefined;
@@ -108,7 +105,6 @@ export declare const Document: {
             SignatureRequired?: boolean | undefined;
             IsActive?: boolean | undefined;
         } & {
-            DocumentID?: string | undefined;
             OrganizationID?: string | undefined;
             DocumentType?: DocumentType | undefined;
             Version?: string | undefined;
@@ -147,7 +143,6 @@ export declare const Document: {
     } & { [K_4 in Exclude<keyof I, keyof Document>]: never; }>(base?: I | undefined): Document;
     fromPartial<I_1 extends {
         Document?: {
-            DocumentID?: string | undefined;
             OrganizationID?: string | undefined;
             DocumentType?: DocumentType | undefined;
             Version?: string | undefined;
@@ -172,7 +167,6 @@ export declare const Document: {
         } | undefined;
     } & {
         Document?: ({
-            DocumentID?: string | undefined;
             OrganizationID?: string | undefined;
             DocumentType?: DocumentType | undefined;
             Version?: string | undefined;
@@ -184,7 +178,6 @@ export declare const Document: {
             SignatureRequired?: boolean | undefined;
             IsActive?: boolean | undefined;
         } & {
-            DocumentID?: string | undefined;
             OrganizationID?: string | undefined;
             DocumentType?: DocumentType | undefined;
             Version?: string | undefined;
@@ -228,7 +221,6 @@ export declare const DocumentDetails: {
     fromJSON(object: any): DocumentDetails;
     toJSON(message: DocumentDetails): unknown;
     create<I extends {
-        DocumentID?: string | undefined;
         OrganizationID?: string | undefined;
         DocumentType?: DocumentType | undefined;
         Version?: string | undefined;
@@ -240,7 +232,6 @@ export declare const DocumentDetails: {
         SignatureRequired?: boolean | undefined;
         IsActive?: boolean | undefined;
     } & {
-        DocumentID?: string | undefined;
         OrganizationID?: string | undefined;
         DocumentType?: DocumentType | undefined;
         Version?: string | undefined;
@@ -257,7 +248,6 @@ export declare const DocumentDetails: {
         IsActive?: boolean | undefined;
     } & { [K_1 in Exclude<keyof I, keyof DocumentDetails>]: never; }>(base?: I | undefined): DocumentDetails;
     fromPartial<I_1 extends {
-        DocumentID?: string | undefined;
         OrganizationID?: string | undefined;
         DocumentType?: DocumentType | undefined;
         Version?: string | undefined;
@@ -269,7 +259,6 @@ export declare const DocumentDetails: {
         SignatureRequired?: boolean | undefined;
         IsActive?: boolean | undefined;
     } & {
-        DocumentID?: string | undefined;
         OrganizationID?: string | undefined;
         DocumentType?: DocumentType | undefined;
         Version?: string | undefined;
@@ -318,7 +307,6 @@ export declare const Documents: {
     create<I extends {
         Documents?: {
             Document?: {
-                DocumentID?: string | undefined;
                 OrganizationID?: string | undefined;
                 DocumentType?: DocumentType | undefined;
                 Version?: string | undefined;
@@ -346,7 +334,6 @@ export declare const Documents: {
     } & {
         Documents?: ({
             Document?: {
-                DocumentID?: string | undefined;
                 OrganizationID?: string | undefined;
                 DocumentType?: DocumentType | undefined;
                 Version?: string | undefined;
@@ -371,7 +358,6 @@ export declare const Documents: {
             } | undefined;
         }[] & ({
             Document?: {
-                DocumentID?: string | undefined;
                 OrganizationID?: string | undefined;
                 DocumentType?: DocumentType | undefined;
                 Version?: string | undefined;
@@ -396,7 +382,6 @@ export declare const Documents: {
             } | undefined;
         } & {
             Document?: ({
-                DocumentID?: string | undefined;
                 OrganizationID?: string | undefined;
                 DocumentType?: DocumentType | undefined;
                 Version?: string | undefined;
@@ -408,7 +393,6 @@ export declare const Documents: {
                 SignatureRequired?: boolean | undefined;
                 IsActive?: boolean | undefined;
             } & {
-                DocumentID?: string | undefined;
                 OrganizationID?: string | undefined;
                 DocumentType?: DocumentType | undefined;
                 Version?: string | undefined;
@@ -446,7 +430,6 @@ export declare const Documents: {
             } & { [K_3 in Exclude<keyof I["Documents"][number]["Audit"], keyof Audit>]: never; }) | undefined;
         } & { [K_4 in Exclude<keyof I["Documents"][number], keyof Document>]: never; })[] & { [K_5 in Exclude<keyof I["Documents"], keyof {
             Document?: {
-                DocumentID?: string | undefined;
                 OrganizationID?: string | undefined;
                 DocumentType?: DocumentType | undefined;
                 Version?: string | undefined;
@@ -475,7 +458,6 @@ export declare const Documents: {
     fromPartial<I_1 extends {
         Documents?: {
             Document?: {
-                DocumentID?: string | undefined;
                 OrganizationID?: string | undefined;
                 DocumentType?: DocumentType | undefined;
                 Version?: string | undefined;
@@ -503,7 +485,6 @@ export declare const Documents: {
     } & {
         Documents?: ({
             Document?: {
-                DocumentID?: string | undefined;
                 OrganizationID?: string | undefined;
                 DocumentType?: DocumentType | undefined;
                 Version?: string | undefined;
@@ -528,7 +509,6 @@ export declare const Documents: {
             } | undefined;
         }[] & ({
             Document?: {
-                DocumentID?: string | undefined;
                 OrganizationID?: string | undefined;
                 DocumentType?: DocumentType | undefined;
                 Version?: string | undefined;
@@ -553,7 +533,6 @@ export declare const Documents: {
             } | undefined;
         } & {
             Document?: ({
-                DocumentID?: string | undefined;
                 OrganizationID?: string | undefined;
                 DocumentType?: DocumentType | undefined;
                 Version?: string | undefined;
@@ -565,7 +544,6 @@ export declare const Documents: {
                 SignatureRequired?: boolean | undefined;
                 IsActive?: boolean | undefined;
             } & {
-                DocumentID?: string | undefined;
                 OrganizationID?: string | undefined;
                 DocumentType?: DocumentType | undefined;
                 Version?: string | undefined;
@@ -603,7 +581,6 @@ export declare const Documents: {
             } & { [K_10 in Exclude<keyof I_1["Documents"][number]["Audit"], keyof Audit>]: never; }) | undefined;
         } & { [K_11 in Exclude<keyof I_1["Documents"][number], keyof Document>]: never; })[] & { [K_12 in Exclude<keyof I_1["Documents"], keyof {
             Document?: {
-                DocumentID?: string | undefined;
                 OrganizationID?: string | undefined;
                 DocumentType?: DocumentType | undefined;
                 Version?: string | undefined;
@@ -637,7 +614,7 @@ export declare const UserDocumentCompliance: {
     toJSON(message: UserDocumentCompliance): unknown;
     create<I extends {
         SignedDocuments?: {
-            DocumentID?: string | undefined;
+            DocumentType?: DocumentType | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
@@ -646,22 +623,22 @@ export declare const UserDocumentCompliance: {
         SigningRequired?: boolean | undefined;
     } & {
         SignedDocuments?: ({
-            DocumentID?: string | undefined;
+            DocumentType?: DocumentType | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
         }[] & ({
-            DocumentID?: string | undefined;
+            DocumentType?: DocumentType | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
         } & {
-            DocumentID?: string | undefined;
+            DocumentType?: DocumentType | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
         } & { [K in Exclude<keyof I["SignedDocuments"][number], keyof SignedDocument>]: never; })[] & { [K_1 in Exclude<keyof I["SignedDocuments"], keyof {
-            DocumentID?: string | undefined;
+            DocumentType?: DocumentType | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
@@ -671,7 +648,7 @@ export declare const UserDocumentCompliance: {
     } & { [K_2 in Exclude<keyof I, keyof UserDocumentCompliance>]: never; }>(base?: I | undefined): UserDocumentCompliance;
     fromPartial<I_1 extends {
         SignedDocuments?: {
-            DocumentID?: string | undefined;
+            DocumentType?: DocumentType | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
@@ -680,22 +657,22 @@ export declare const UserDocumentCompliance: {
         SigningRequired?: boolean | undefined;
     } & {
         SignedDocuments?: ({
-            DocumentID?: string | undefined;
+            DocumentType?: DocumentType | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
         }[] & ({
-            DocumentID?: string | undefined;
+            DocumentType?: DocumentType | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
         } & {
-            DocumentID?: string | undefined;
+            DocumentType?: DocumentType | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
         } & { [K_3 in Exclude<keyof I_1["SignedDocuments"][number], keyof SignedDocument>]: never; })[] & { [K_4 in Exclude<keyof I_1["SignedDocuments"], keyof {
-            DocumentID?: string | undefined;
+            DocumentType?: DocumentType | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
@@ -710,23 +687,23 @@ export declare const SignedDocument: {
     fromJSON(object: any): SignedDocument;
     toJSON(message: SignedDocument): unknown;
     create<I extends {
-        DocumentID?: string | undefined;
+        DocumentType?: DocumentType | undefined;
         SignedVersion?: string | undefined;
         DocumentState?: DocumentState | undefined;
         SignedAt?: Date | undefined;
     } & {
-        DocumentID?: string | undefined;
+        DocumentType?: DocumentType | undefined;
         SignedVersion?: string | undefined;
         DocumentState?: DocumentState | undefined;
         SignedAt?: Date | undefined;
     } & { [K in Exclude<keyof I, keyof SignedDocument>]: never; }>(base?: I | undefined): SignedDocument;
     fromPartial<I_1 extends {
-        DocumentID?: string | undefined;
+        DocumentType?: DocumentType | undefined;
         SignedVersion?: string | undefined;
         DocumentState?: DocumentState | undefined;
         SignedAt?: Date | undefined;
     } & {
-        DocumentID?: string | undefined;
+        DocumentType?: DocumentType | undefined;
         SignedVersion?: string | undefined;
         DocumentState?: DocumentState | undefined;
         SignedAt?: Date | undefined;

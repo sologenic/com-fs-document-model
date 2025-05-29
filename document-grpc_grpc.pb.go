@@ -7,6 +7,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -20,7 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 type DocumentServiceClient interface {
 	Get(ctx context.Context, in *DocumentID, opts ...grpc.CallOption) (*Document, error)
 	List(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*Documents, error)
-	Upsert(ctx context.Context, in *Document, opts ...grpc.CallOption) (*DocumentID, error)
+	Upsert(ctx context.Context, in *Document, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type documentServiceClient struct {
@@ -49,8 +50,8 @@ func (c *documentServiceClient) List(ctx context.Context, in *Filter, opts ...gr
 	return out, nil
 }
 
-func (c *documentServiceClient) Upsert(ctx context.Context, in *Document, opts ...grpc.CallOption) (*DocumentID, error) {
-	out := new(DocumentID)
+func (c *documentServiceClient) Upsert(ctx context.Context, in *Document, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/document.DocumentService/Upsert", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -64,7 +65,7 @@ func (c *documentServiceClient) Upsert(ctx context.Context, in *Document, opts .
 type DocumentServiceServer interface {
 	Get(context.Context, *DocumentID) (*Document, error)
 	List(context.Context, *Filter) (*Documents, error)
-	Upsert(context.Context, *Document) (*DocumentID, error)
+	Upsert(context.Context, *Document) (*emptypb.Empty, error)
 }
 
 // UnimplementedDocumentServiceServer should be embedded to have forward compatible implementations.
@@ -77,7 +78,7 @@ func (UnimplementedDocumentServiceServer) Get(context.Context, *DocumentID) (*Do
 func (UnimplementedDocumentServiceServer) List(context.Context, *Filter) (*Documents, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
-func (UnimplementedDocumentServiceServer) Upsert(context.Context, *Document) (*DocumentID, error) {
+func (UnimplementedDocumentServiceServer) Upsert(context.Context, *Document) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Upsert not implemented")
 }
 

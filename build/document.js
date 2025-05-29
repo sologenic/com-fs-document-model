@@ -193,7 +193,6 @@ export const Document = {
 };
 function createBaseDocumentDetails() {
     return {
-        DocumentID: "",
         OrganizationID: "",
         DocumentType: 0,
         Version: "",
@@ -204,26 +203,23 @@ function createBaseDocumentDetails() {
 }
 export const DocumentDetails = {
     encode(message, writer = _m0.Writer.create()) {
-        if (message.DocumentID !== "") {
-            writer.uint32(10).string(message.DocumentID);
-        }
         if (message.OrganizationID !== "") {
-            writer.uint32(18).string(message.OrganizationID);
+            writer.uint32(10).string(message.OrganizationID);
         }
         if (message.DocumentType !== 0) {
-            writer.uint32(24).int32(message.DocumentType);
+            writer.uint32(16).int32(message.DocumentType);
         }
         if (message.Version !== "") {
-            writer.uint32(34).string(message.Version);
+            writer.uint32(26).string(message.Version);
         }
         if (message.File !== undefined) {
-            File.encode(message.File, writer.uint32(42).fork()).ldelim();
+            File.encode(message.File, writer.uint32(34).fork()).ldelim();
         }
         if (message.SignatureRequired !== false) {
-            writer.uint32(48).bool(message.SignatureRequired);
+            writer.uint32(40).bool(message.SignatureRequired);
         }
         if (message.IsActive !== false) {
-            writer.uint32(56).bool(message.IsActive);
+            writer.uint32(48).bool(message.IsActive);
         }
         return writer;
     },
@@ -238,40 +234,34 @@ export const DocumentDetails = {
                     if (tag !== 10) {
                         break;
                     }
-                    message.DocumentID = reader.string();
-                    continue;
-                case 2:
-                    if (tag !== 18) {
-                        break;
-                    }
                     message.OrganizationID = reader.string();
                     continue;
-                case 3:
-                    if (tag !== 24) {
+                case 2:
+                    if (tag !== 16) {
                         break;
                     }
                     message.DocumentType = reader.int32();
+                    continue;
+                case 3:
+                    if (tag !== 26) {
+                        break;
+                    }
+                    message.Version = reader.string();
                     continue;
                 case 4:
                     if (tag !== 34) {
                         break;
                     }
-                    message.Version = reader.string();
-                    continue;
-                case 5:
-                    if (tag !== 42) {
-                        break;
-                    }
                     message.File = File.decode(reader, reader.uint32());
                     continue;
-                case 6:
-                    if (tag !== 48) {
+                case 5:
+                    if (tag !== 40) {
                         break;
                     }
                     message.SignatureRequired = reader.bool();
                     continue;
-                case 7:
-                    if (tag !== 56) {
+                case 6:
+                    if (tag !== 48) {
                         break;
                     }
                     message.IsActive = reader.bool();
@@ -286,7 +276,6 @@ export const DocumentDetails = {
     },
     fromJSON(object) {
         return {
-            DocumentID: isSet(object.DocumentID) ? globalThis.String(object.DocumentID) : "",
             OrganizationID: isSet(object.OrganizationID) ? globalThis.String(object.OrganizationID) : "",
             DocumentType: isSet(object.DocumentType) ? documentTypeFromJSON(object.DocumentType) : 0,
             Version: isSet(object.Version) ? globalThis.String(object.Version) : "",
@@ -297,9 +286,6 @@ export const DocumentDetails = {
     },
     toJSON(message) {
         const obj = {};
-        if (message.DocumentID !== "") {
-            obj.DocumentID = message.DocumentID;
-        }
         if (message.OrganizationID !== "") {
             obj.OrganizationID = message.OrganizationID;
         }
@@ -324,15 +310,14 @@ export const DocumentDetails = {
         return DocumentDetails.fromPartial(base !== null && base !== void 0 ? base : {});
     },
     fromPartial(object) {
-        var _a, _b, _c, _d, _e, _f;
+        var _a, _b, _c, _d, _e;
         const message = createBaseDocumentDetails();
-        message.DocumentID = (_a = object.DocumentID) !== null && _a !== void 0 ? _a : "";
-        message.OrganizationID = (_b = object.OrganizationID) !== null && _b !== void 0 ? _b : "";
-        message.DocumentType = (_c = object.DocumentType) !== null && _c !== void 0 ? _c : 0;
-        message.Version = (_d = object.Version) !== null && _d !== void 0 ? _d : "";
+        message.OrganizationID = (_a = object.OrganizationID) !== null && _a !== void 0 ? _a : "";
+        message.DocumentType = (_b = object.DocumentType) !== null && _b !== void 0 ? _b : 0;
+        message.Version = (_c = object.Version) !== null && _c !== void 0 ? _c : "";
         message.File = (object.File !== undefined && object.File !== null) ? File.fromPartial(object.File) : undefined;
-        message.SignatureRequired = (_e = object.SignatureRequired) !== null && _e !== void 0 ? _e : false;
-        message.IsActive = (_f = object.IsActive) !== null && _f !== void 0 ? _f : false;
+        message.SignatureRequired = (_d = object.SignatureRequired) !== null && _d !== void 0 ? _d : false;
+        message.IsActive = (_e = object.IsActive) !== null && _e !== void 0 ? _e : false;
         return message;
     },
 };
@@ -574,12 +559,12 @@ export const UserDocumentCompliance = {
     },
 };
 function createBaseSignedDocument() {
-    return { DocumentID: "", SignedVersion: "", DocumentState: 0, SignedAt: undefined };
+    return { DocumentType: 0, SignedVersion: "", DocumentState: 0, SignedAt: undefined };
 }
 export const SignedDocument = {
     encode(message, writer = _m0.Writer.create()) {
-        if (message.DocumentID !== "") {
-            writer.uint32(10).string(message.DocumentID);
+        if (message.DocumentType !== 0) {
+            writer.uint32(8).int32(message.DocumentType);
         }
         if (message.SignedVersion !== "") {
             writer.uint32(18).string(message.SignedVersion);
@@ -600,10 +585,10 @@ export const SignedDocument = {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    if (tag !== 10) {
+                    if (tag !== 8) {
                         break;
                     }
-                    message.DocumentID = reader.string();
+                    message.DocumentType = reader.int32();
                     continue;
                 case 2:
                     if (tag !== 18) {
@@ -633,7 +618,7 @@ export const SignedDocument = {
     },
     fromJSON(object) {
         return {
-            DocumentID: isSet(object.DocumentID) ? globalThis.String(object.DocumentID) : "",
+            DocumentType: isSet(object.DocumentType) ? documentTypeFromJSON(object.DocumentType) : 0,
             SignedVersion: isSet(object.SignedVersion) ? globalThis.String(object.SignedVersion) : "",
             DocumentState: isSet(object.DocumentState) ? documentStateFromJSON(object.DocumentState) : 0,
             SignedAt: isSet(object.SignedAt) ? fromJsonTimestamp(object.SignedAt) : undefined,
@@ -641,8 +626,8 @@ export const SignedDocument = {
     },
     toJSON(message) {
         const obj = {};
-        if (message.DocumentID !== "") {
-            obj.DocumentID = message.DocumentID;
+        if (message.DocumentType !== 0) {
+            obj.DocumentType = documentTypeToJSON(message.DocumentType);
         }
         if (message.SignedVersion !== "") {
             obj.SignedVersion = message.SignedVersion;
@@ -661,7 +646,7 @@ export const SignedDocument = {
     fromPartial(object) {
         var _a, _b, _c, _d;
         const message = createBaseSignedDocument();
-        message.DocumentID = (_a = object.DocumentID) !== null && _a !== void 0 ? _a : "";
+        message.DocumentType = (_a = object.DocumentType) !== null && _a !== void 0 ? _a : 0;
         message.SignedVersion = (_b = object.SignedVersion) !== null && _b !== void 0 ? _b : "";
         message.DocumentState = (_c = object.DocumentState) !== null && _c !== void 0 ? _c : 0;
         message.SignedAt = (_d = object.SignedAt) !== null && _d !== void 0 ? _d : undefined;

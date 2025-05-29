@@ -4,16 +4,18 @@ package document;
 
 option go_package = "github.com/sologenic/com-fs-document-model;document";
 
+import "google/protobuf/empty.proto";
 import "document.proto";
 
 service DocumentService {
     rpc Get (DocumentID) returns (Document) {}
     rpc List (Filter) returns (Documents) {}
-    rpc Upsert (Document) returns (DocumentID) {}
+    rpc Upsert (Document) returns (google.protobuf.Empty) {}
 }
 
 message DocumentID {
-    string DocumentID = 1;
+    string OrganizationID = 1;
+    DocumentType DocumentType = 2;
 }
 
 message Filter {
