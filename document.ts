@@ -12,58 +12,49 @@ import { MetaData } from "./sologenic/com-fs-utils-lib/models/metadata/metadata"
 
 export const protobufPackage = "document";
 
-export enum DocumentType {
-  NOT_USED_TYPE = 0,
-  PRIVACY = 1,
-  REGULATORY = 2,
-  INFORMATION = 3,
-  MARGIN = 4,
-  SHORT = 5,
+export enum DocumentStatus {
+  NOT_USED_STATUS = 0,
+  /** UNPUBLISHED - Document is unpublished and in draft state */
+  UNPUBLISHED = 1,
+  /** ACTIVE - Document is active and required for users */
+  ACTIVE = 2,
+  /** OUTDATED - Document is outdated and no longer required */
+  OUTDATED = 3,
   UNRECOGNIZED = -1,
 }
 
-export function documentTypeFromJSON(object: any): DocumentType {
+export function documentStatusFromJSON(object: any): DocumentStatus {
   switch (object) {
     case 0:
-    case "NOT_USED_TYPE":
-      return DocumentType.NOT_USED_TYPE;
+    case "NOT_USED_STATUS":
+      return DocumentStatus.NOT_USED_STATUS;
     case 1:
-    case "PRIVACY":
-      return DocumentType.PRIVACY;
+    case "UNPUBLISHED":
+      return DocumentStatus.UNPUBLISHED;
     case 2:
-    case "REGULATORY":
-      return DocumentType.REGULATORY;
+    case "ACTIVE":
+      return DocumentStatus.ACTIVE;
     case 3:
-    case "INFORMATION":
-      return DocumentType.INFORMATION;
-    case 4:
-    case "MARGIN":
-      return DocumentType.MARGIN;
-    case 5:
-    case "SHORT":
-      return DocumentType.SHORT;
+    case "OUTDATED":
+      return DocumentStatus.OUTDATED;
     case -1:
     case "UNRECOGNIZED":
     default:
-      return DocumentType.UNRECOGNIZED;
+      return DocumentStatus.UNRECOGNIZED;
   }
 }
 
-export function documentTypeToJSON(object: DocumentType): string {
+export function documentStatusToJSON(object: DocumentStatus): string {
   switch (object) {
-    case DocumentType.NOT_USED_TYPE:
-      return "NOT_USED_TYPE";
-    case DocumentType.PRIVACY:
-      return "PRIVACY";
-    case DocumentType.REGULATORY:
-      return "REGULATORY";
-    case DocumentType.INFORMATION:
-      return "INFORMATION";
-    case DocumentType.MARGIN:
-      return "MARGIN";
-    case DocumentType.SHORT:
-      return "SHORT";
-    case DocumentType.UNRECOGNIZED:
+    case DocumentStatus.NOT_USED_STATUS:
+      return "NOT_USED_STATUS";
+    case DocumentStatus.UNPUBLISHED:
+      return "UNPUBLISHED";
+    case DocumentStatus.ACTIVE:
+      return "ACTIVE";
+    case DocumentStatus.OUTDATED:
+      return "OUTDATED";
+    case DocumentStatus.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
@@ -123,15 +114,19 @@ export interface Document {
   Audit: Audit | undefined;
 }
 
-/** Key format: OrganizationID_DocumentType */
+/** Key format: OrganizationID_Name_Version */
 export interface DocumentDetails {
   OrganizationID: string;
-  DocumentType: DocumentType;
+  Name: string;
   /** Latest version of the document */
   Version: string;
-  File: File | undefined;
+  Description: string;
+  File:
+    | File
+    | undefined;
+  /** if false, the document is for display/reference only */
   SignatureRequired: boolean;
-  IsActive: boolean;
+  Status: DocumentStatus;
 }
 
 export interface File {
@@ -139,7 +134,11 @@ export interface File {
   Reference: string;
   Extension: string;
   /** User defined name of the file, used as a "description" and not to reference the file */
-  Name?: string | undefined;
+  Name?:
+    | string
+    | undefined;
+  /** MD5 checksum of the file for integrity verification */
+  MD5SUM: string;
 }
 
 export interface Documents {
@@ -150,19 +149,18 @@ export interface Documents {
 /** UserDocumentCompliance is embedded in User object to track user document compliance */
 export interface UserDocumentCompliance {
   SignedDocuments: SignedDocument[];
-  ComplianceCheckedAt:
-    | Date
-    | undefined;
-  /** Flag indicating if user needs to sign documents */
-  SigningRequired: boolean;
 }
 
 export interface SignedDocument {
-  DocumentType: DocumentType;
+  tName: string;
   /** The version of the document that was signed. This may differ from the current/latest version. */
   SignedVersion: string;
   DocumentState: DocumentState;
-  SignedAt: Date | undefined;
+  SignedAt:
+    | Date
+    | undefined;
+  /** MD5 checksum of the file that was signed */
+  FileMD5SUM: string;
 }
 
 function createBaseDocument(): Document {
@@ -261,11 +259,12 @@ export const Document = {
 function createBaseDocumentDetails(): DocumentDetails {
   return {
     OrganizationID: "",
-    DocumentType: 0,
+    Name: "",
     Version: "",
+    Description: "",
     File: undefined,
     SignatureRequired: false,
-    IsActive: false,
+    Status: 0,
   };
 }
 
@@ -274,20 +273,23 @@ export const DocumentDetails = {
     if (message.OrganizationID !== "") {
       writer.uint32(10).string(message.OrganizationID);
     }
-    if (message.DocumentType !== 0) {
-      writer.uint32(16).int32(message.DocumentType);
+    if (message.Name !== "") {
+      writer.uint32(18).string(message.Name);
     }
     if (message.Version !== "") {
       writer.uint32(26).string(message.Version);
     }
+    if (message.Description !== "") {
+      writer.uint32(34).string(message.Description);
+    }
     if (message.File !== undefined) {
-      File.encode(message.File, writer.uint32(34).fork()).ldelim();
+      File.encode(message.File, writer.uint32(42).fork()).ldelim();
     }
     if (message.SignatureRequired !== false) {
-      writer.uint32(40).bool(message.SignatureRequired);
+      writer.uint32(48).bool(message.SignatureRequired);
     }
-    if (message.IsActive !== false) {
-      writer.uint32(48).bool(message.IsActive);
+    if (message.Status !== 0) {
+      writer.uint32(56).int32(message.Status);
     }
     return writer;
   },
@@ -307,11 +309,11 @@ export const DocumentDetails = {
           message.OrganizationID = reader.string();
           continue;
         case 2:
-          if (tag !== 16) {
+          if (tag !== 18) {
             break;
           }
 
-          message.DocumentType = reader.int32() as any;
+          message.Name = reader.string();
           continue;
         case 3:
           if (tag !== 26) {
@@ -325,21 +327,28 @@ export const DocumentDetails = {
             break;
           }
 
-          message.File = File.decode(reader, reader.uint32());
+          message.Description = reader.string();
           continue;
         case 5:
-          if (tag !== 40) {
+          if (tag !== 42) {
             break;
           }
 
-          message.SignatureRequired = reader.bool();
+          message.File = File.decode(reader, reader.uint32());
           continue;
         case 6:
           if (tag !== 48) {
             break;
           }
 
-          message.IsActive = reader.bool();
+          message.SignatureRequired = reader.bool();
+          continue;
+        case 7:
+          if (tag !== 56) {
+            break;
+          }
+
+          message.Status = reader.int32() as any;
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -353,11 +362,12 @@ export const DocumentDetails = {
   fromJSON(object: any): DocumentDetails {
     return {
       OrganizationID: isSet(object.OrganizationID) ? globalThis.String(object.OrganizationID) : "",
-      DocumentType: isSet(object.DocumentType) ? documentTypeFromJSON(object.DocumentType) : 0,
+      Name: isSet(object.Name) ? globalThis.String(object.Name) : "",
       Version: isSet(object.Version) ? globalThis.String(object.Version) : "",
+      Description: isSet(object.Description) ? globalThis.String(object.Description) : "",
       File: isSet(object.File) ? File.fromJSON(object.File) : undefined,
       SignatureRequired: isSet(object.SignatureRequired) ? globalThis.Boolean(object.SignatureRequired) : false,
-      IsActive: isSet(object.IsActive) ? globalThis.Boolean(object.IsActive) : false,
+      Status: isSet(object.Status) ? documentStatusFromJSON(object.Status) : 0,
     };
   },
 
@@ -366,11 +376,14 @@ export const DocumentDetails = {
     if (message.OrganizationID !== "") {
       obj.OrganizationID = message.OrganizationID;
     }
-    if (message.DocumentType !== 0) {
-      obj.DocumentType = documentTypeToJSON(message.DocumentType);
+    if (message.Name !== "") {
+      obj.Name = message.Name;
     }
     if (message.Version !== "") {
       obj.Version = message.Version;
+    }
+    if (message.Description !== "") {
+      obj.Description = message.Description;
     }
     if (message.File !== undefined) {
       obj.File = File.toJSON(message.File);
@@ -378,8 +391,8 @@ export const DocumentDetails = {
     if (message.SignatureRequired !== false) {
       obj.SignatureRequired = message.SignatureRequired;
     }
-    if (message.IsActive !== false) {
-      obj.IsActive = message.IsActive;
+    if (message.Status !== 0) {
+      obj.Status = documentStatusToJSON(message.Status);
     }
     return obj;
   },
@@ -390,17 +403,18 @@ export const DocumentDetails = {
   fromPartial<I extends Exact<DeepPartial<DocumentDetails>, I>>(object: I): DocumentDetails {
     const message = createBaseDocumentDetails();
     message.OrganizationID = object.OrganizationID ?? "";
-    message.DocumentType = object.DocumentType ?? 0;
+    message.Name = object.Name ?? "";
     message.Version = object.Version ?? "";
+    message.Description = object.Description ?? "";
     message.File = (object.File !== undefined && object.File !== null) ? File.fromPartial(object.File) : undefined;
     message.SignatureRequired = object.SignatureRequired ?? false;
-    message.IsActive = object.IsActive ?? false;
+    message.Status = object.Status ?? 0;
     return message;
   },
 };
 
 function createBaseFile(): File {
-  return { Reference: "", Extension: "", Name: undefined };
+  return { Reference: "", Extension: "", Name: undefined, MD5SUM: "" };
 }
 
 export const File = {
@@ -413,6 +427,9 @@ export const File = {
     }
     if (message.Name !== undefined) {
       writer.uint32(26).string(message.Name);
+    }
+    if (message.MD5SUM !== "") {
+      writer.uint32(34).string(message.MD5SUM);
     }
     return writer;
   },
@@ -445,6 +462,13 @@ export const File = {
 
           message.Name = reader.string();
           continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.MD5SUM = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -459,6 +483,7 @@ export const File = {
       Reference: isSet(object.Reference) ? globalThis.String(object.Reference) : "",
       Extension: isSet(object.Extension) ? globalThis.String(object.Extension) : "",
       Name: isSet(object.Name) ? globalThis.String(object.Name) : undefined,
+      MD5SUM: isSet(object.MD5SUM) ? globalThis.String(object.MD5SUM) : "",
     };
   },
 
@@ -473,6 +498,9 @@ export const File = {
     if (message.Name !== undefined) {
       obj.Name = message.Name;
     }
+    if (message.MD5SUM !== "") {
+      obj.MD5SUM = message.MD5SUM;
+    }
     return obj;
   },
 
@@ -484,6 +512,7 @@ export const File = {
     message.Reference = object.Reference ?? "";
     message.Extension = object.Extension ?? "";
     message.Name = object.Name ?? undefined;
+    message.MD5SUM = object.MD5SUM ?? "";
     return message;
   },
 };
@@ -565,19 +594,13 @@ export const Documents = {
 };
 
 function createBaseUserDocumentCompliance(): UserDocumentCompliance {
-  return { SignedDocuments: [], ComplianceCheckedAt: undefined, SigningRequired: false };
+  return { SignedDocuments: [] };
 }
 
 export const UserDocumentCompliance = {
   encode(message: UserDocumentCompliance, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.SignedDocuments) {
       SignedDocument.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.ComplianceCheckedAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.ComplianceCheckedAt), writer.uint32(18).fork()).ldelim();
-    }
-    if (message.SigningRequired !== false) {
-      writer.uint32(24).bool(message.SigningRequired);
     }
     return writer;
   },
@@ -596,20 +619,6 @@ export const UserDocumentCompliance = {
 
           message.SignedDocuments.push(SignedDocument.decode(reader, reader.uint32()));
           continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.ComplianceCheckedAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
-          continue;
-        case 3:
-          if (tag !== 24) {
-            break;
-          }
-
-          message.SigningRequired = reader.bool();
-          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -624,10 +633,6 @@ export const UserDocumentCompliance = {
       SignedDocuments: globalThis.Array.isArray(object?.SignedDocuments)
         ? object.SignedDocuments.map((e: any) => SignedDocument.fromJSON(e))
         : [],
-      ComplianceCheckedAt: isSet(object.ComplianceCheckedAt)
-        ? fromJsonTimestamp(object.ComplianceCheckedAt)
-        : undefined,
-      SigningRequired: isSet(object.SigningRequired) ? globalThis.Boolean(object.SigningRequired) : false,
     };
   },
 
@@ -635,12 +640,6 @@ export const UserDocumentCompliance = {
     const obj: any = {};
     if (message.SignedDocuments?.length) {
       obj.SignedDocuments = message.SignedDocuments.map((e) => SignedDocument.toJSON(e));
-    }
-    if (message.ComplianceCheckedAt !== undefined) {
-      obj.ComplianceCheckedAt = message.ComplianceCheckedAt.toISOString();
-    }
-    if (message.SigningRequired !== false) {
-      obj.SigningRequired = message.SigningRequired;
     }
     return obj;
   },
@@ -651,20 +650,18 @@ export const UserDocumentCompliance = {
   fromPartial<I extends Exact<DeepPartial<UserDocumentCompliance>, I>>(object: I): UserDocumentCompliance {
     const message = createBaseUserDocumentCompliance();
     message.SignedDocuments = object.SignedDocuments?.map((e) => SignedDocument.fromPartial(e)) || [];
-    message.ComplianceCheckedAt = object.ComplianceCheckedAt ?? undefined;
-    message.SigningRequired = object.SigningRequired ?? false;
     return message;
   },
 };
 
 function createBaseSignedDocument(): SignedDocument {
-  return { DocumentType: 0, SignedVersion: "", DocumentState: 0, SignedAt: undefined };
+  return { tName: "", SignedVersion: "", DocumentState: 0, SignedAt: undefined, FileMD5SUM: "" };
 }
 
 export const SignedDocument = {
   encode(message: SignedDocument, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.DocumentType !== 0) {
-      writer.uint32(8).int32(message.DocumentType);
+    if (message.tName !== "") {
+      writer.uint32(10).string(message.tName);
     }
     if (message.SignedVersion !== "") {
       writer.uint32(18).string(message.SignedVersion);
@@ -674,6 +671,9 @@ export const SignedDocument = {
     }
     if (message.SignedAt !== undefined) {
       Timestamp.encode(toTimestamp(message.SignedAt), writer.uint32(34).fork()).ldelim();
+    }
+    if (message.FileMD5SUM !== "") {
+      writer.uint32(42).string(message.FileMD5SUM);
     }
     return writer;
   },
@@ -686,11 +686,11 @@ export const SignedDocument = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 8) {
+          if (tag !== 10) {
             break;
           }
 
-          message.DocumentType = reader.int32() as any;
+          message.tName = reader.string();
           continue;
         case 2:
           if (tag !== 18) {
@@ -713,6 +713,13 @@ export const SignedDocument = {
 
           message.SignedAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.FileMD5SUM = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -724,17 +731,18 @@ export const SignedDocument = {
 
   fromJSON(object: any): SignedDocument {
     return {
-      DocumentType: isSet(object.DocumentType) ? documentTypeFromJSON(object.DocumentType) : 0,
+      tName: isSet(object.tName) ? globalThis.String(object.tName) : "",
       SignedVersion: isSet(object.SignedVersion) ? globalThis.String(object.SignedVersion) : "",
       DocumentState: isSet(object.DocumentState) ? documentStateFromJSON(object.DocumentState) : 0,
       SignedAt: isSet(object.SignedAt) ? fromJsonTimestamp(object.SignedAt) : undefined,
+      FileMD5SUM: isSet(object.FileMD5SUM) ? globalThis.String(object.FileMD5SUM) : "",
     };
   },
 
   toJSON(message: SignedDocument): unknown {
     const obj: any = {};
-    if (message.DocumentType !== 0) {
-      obj.DocumentType = documentTypeToJSON(message.DocumentType);
+    if (message.tName !== "") {
+      obj.tName = message.tName;
     }
     if (message.SignedVersion !== "") {
       obj.SignedVersion = message.SignedVersion;
@@ -745,6 +753,9 @@ export const SignedDocument = {
     if (message.SignedAt !== undefined) {
       obj.SignedAt = message.SignedAt.toISOString();
     }
+    if (message.FileMD5SUM !== "") {
+      obj.FileMD5SUM = message.FileMD5SUM;
+    }
     return obj;
   },
 
@@ -753,10 +764,11 @@ export const SignedDocument = {
   },
   fromPartial<I extends Exact<DeepPartial<SignedDocument>, I>>(object: I): SignedDocument {
     const message = createBaseSignedDocument();
-    message.DocumentType = object.DocumentType ?? 0;
+    message.tName = object.tName ?? "";
     message.SignedVersion = object.SignedVersion ?? "";
     message.DocumentState = object.DocumentState ?? 0;
     message.SignedAt = object.SignedAt ?? undefined;
+    message.FileMD5SUM = object.FileMD5SUM ?? "";
     return message;
   },
 };

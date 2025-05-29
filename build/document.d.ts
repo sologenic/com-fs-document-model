@@ -2,17 +2,18 @@ import _m0 from "protobufjs/minimal";
 import { Audit } from "./sologenic/com-fs-utils-lib/models/audit/audit";
 import { MetaData } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
 export declare const protobufPackage = "document";
-export declare enum DocumentType {
-    NOT_USED_TYPE = 0,
-    PRIVACY = 1,
-    REGULATORY = 2,
-    INFORMATION = 3,
-    MARGIN = 4,
-    SHORT = 5,
+export declare enum DocumentStatus {
+    NOT_USED_STATUS = 0,
+    /** UNPUBLISHED - Document is unpublished and in draft state */
+    UNPUBLISHED = 1,
+    /** ACTIVE - Document is active and required for users */
+    ACTIVE = 2,
+    /** OUTDATED - Document is outdated and no longer required */
+    OUTDATED = 3,
     UNRECOGNIZED = -1
 }
-export declare function documentTypeFromJSON(object: any): DocumentType;
-export declare function documentTypeToJSON(object: DocumentType): string;
+export declare function documentStatusFromJSON(object: any): DocumentStatus;
+export declare function documentStatusToJSON(object: DocumentStatus): string;
 export declare enum DocumentState {
     NOT_USED_STATE = 0,
     TO_BE_SIGNED = 1,
@@ -28,15 +29,17 @@ export interface Document {
     MetaData: MetaData | undefined;
     Audit: Audit | undefined;
 }
-/** Key format: OrganizationID_DocumentType */
+/** Key format: OrganizationID_Name_Version */
 export interface DocumentDetails {
     OrganizationID: string;
-    DocumentType: DocumentType;
+    Name: string;
     /** Latest version of the document */
     Version: string;
+    Description: string;
     File: File | undefined;
+    /** if false, the document is for display/reference only */
     SignatureRequired: boolean;
-    IsActive: boolean;
+    Status: DocumentStatus;
 }
 export interface File {
     /** The reference to the file */
@@ -44,6 +47,8 @@ export interface File {
     Extension: string;
     /** User defined name of the file, used as a "description" and not to reference the file */
     Name?: string | undefined;
+    /** MD5 checksum of the file for integrity verification */
+    MD5SUM: string;
 }
 export interface Documents {
     Documents: Document[];
@@ -52,16 +57,15 @@ export interface Documents {
 /** UserDocumentCompliance is embedded in User object to track user document compliance */
 export interface UserDocumentCompliance {
     SignedDocuments: SignedDocument[];
-    ComplianceCheckedAt: Date | undefined;
-    /** Flag indicating if user needs to sign documents */
-    SigningRequired: boolean;
 }
 export interface SignedDocument {
-    DocumentType: DocumentType;
+    tName: string;
     /** The version of the document that was signed. This may differ from the current/latest version. */
     SignedVersion: string;
     DocumentState: DocumentState;
     SignedAt: Date | undefined;
+    /** MD5 checksum of the file that was signed */
+    FileMD5SUM: string;
 }
 export declare const Document: {
     encode(message: Document, writer?: _m0.Writer): _m0.Writer;
@@ -71,15 +75,17 @@ export declare const Document: {
     create<I extends {
         Document?: {
             OrganizationID?: string | undefined;
-            DocumentType?: DocumentType | undefined;
+            Name?: string | undefined;
             Version?: string | undefined;
+            Description?: string | undefined;
             File?: {
                 Reference?: string | undefined;
                 Extension?: string | undefined;
                 Name?: string | undefined;
+                MD5SUM?: string | undefined;
             } | undefined;
             SignatureRequired?: boolean | undefined;
-            IsActive?: boolean | undefined;
+            Status?: DocumentStatus | undefined;
         } | undefined;
         MetaData?: {
             Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
@@ -95,30 +101,35 @@ export declare const Document: {
     } & {
         Document?: ({
             OrganizationID?: string | undefined;
-            DocumentType?: DocumentType | undefined;
+            Name?: string | undefined;
             Version?: string | undefined;
+            Description?: string | undefined;
             File?: {
                 Reference?: string | undefined;
                 Extension?: string | undefined;
                 Name?: string | undefined;
+                MD5SUM?: string | undefined;
             } | undefined;
             SignatureRequired?: boolean | undefined;
-            IsActive?: boolean | undefined;
+            Status?: DocumentStatus | undefined;
         } & {
             OrganizationID?: string | undefined;
-            DocumentType?: DocumentType | undefined;
+            Name?: string | undefined;
             Version?: string | undefined;
+            Description?: string | undefined;
             File?: ({
                 Reference?: string | undefined;
                 Extension?: string | undefined;
                 Name?: string | undefined;
+                MD5SUM?: string | undefined;
             } & {
                 Reference?: string | undefined;
                 Extension?: string | undefined;
                 Name?: string | undefined;
+                MD5SUM?: string | undefined;
             } & { [K in Exclude<keyof I["Document"]["File"], keyof File>]: never; }) | undefined;
             SignatureRequired?: boolean | undefined;
-            IsActive?: boolean | undefined;
+            Status?: DocumentStatus | undefined;
         } & { [K_1 in Exclude<keyof I["Document"], keyof DocumentDetails>]: never; }) | undefined;
         MetaData?: ({
             Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
@@ -144,15 +155,17 @@ export declare const Document: {
     fromPartial<I_1 extends {
         Document?: {
             OrganizationID?: string | undefined;
-            DocumentType?: DocumentType | undefined;
+            Name?: string | undefined;
             Version?: string | undefined;
+            Description?: string | undefined;
             File?: {
                 Reference?: string | undefined;
                 Extension?: string | undefined;
                 Name?: string | undefined;
+                MD5SUM?: string | undefined;
             } | undefined;
             SignatureRequired?: boolean | undefined;
-            IsActive?: boolean | undefined;
+            Status?: DocumentStatus | undefined;
         } | undefined;
         MetaData?: {
             Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
@@ -168,30 +181,35 @@ export declare const Document: {
     } & {
         Document?: ({
             OrganizationID?: string | undefined;
-            DocumentType?: DocumentType | undefined;
+            Name?: string | undefined;
             Version?: string | undefined;
+            Description?: string | undefined;
             File?: {
                 Reference?: string | undefined;
                 Extension?: string | undefined;
                 Name?: string | undefined;
+                MD5SUM?: string | undefined;
             } | undefined;
             SignatureRequired?: boolean | undefined;
-            IsActive?: boolean | undefined;
+            Status?: DocumentStatus | undefined;
         } & {
             OrganizationID?: string | undefined;
-            DocumentType?: DocumentType | undefined;
+            Name?: string | undefined;
             Version?: string | undefined;
+            Description?: string | undefined;
             File?: ({
                 Reference?: string | undefined;
                 Extension?: string | undefined;
                 Name?: string | undefined;
+                MD5SUM?: string | undefined;
             } & {
                 Reference?: string | undefined;
                 Extension?: string | undefined;
                 Name?: string | undefined;
+                MD5SUM?: string | undefined;
             } & { [K_5 in Exclude<keyof I_1["Document"]["File"], keyof File>]: never; }) | undefined;
             SignatureRequired?: boolean | undefined;
-            IsActive?: boolean | undefined;
+            Status?: DocumentStatus | undefined;
         } & { [K_6 in Exclude<keyof I_1["Document"], keyof DocumentDetails>]: never; }) | undefined;
         MetaData?: ({
             Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
@@ -222,57 +240,67 @@ export declare const DocumentDetails: {
     toJSON(message: DocumentDetails): unknown;
     create<I extends {
         OrganizationID?: string | undefined;
-        DocumentType?: DocumentType | undefined;
+        Name?: string | undefined;
         Version?: string | undefined;
+        Description?: string | undefined;
         File?: {
             Reference?: string | undefined;
             Extension?: string | undefined;
             Name?: string | undefined;
+            MD5SUM?: string | undefined;
         } | undefined;
         SignatureRequired?: boolean | undefined;
-        IsActive?: boolean | undefined;
+        Status?: DocumentStatus | undefined;
     } & {
         OrganizationID?: string | undefined;
-        DocumentType?: DocumentType | undefined;
+        Name?: string | undefined;
         Version?: string | undefined;
+        Description?: string | undefined;
         File?: ({
             Reference?: string | undefined;
             Extension?: string | undefined;
             Name?: string | undefined;
+            MD5SUM?: string | undefined;
         } & {
             Reference?: string | undefined;
             Extension?: string | undefined;
             Name?: string | undefined;
+            MD5SUM?: string | undefined;
         } & { [K in Exclude<keyof I["File"], keyof File>]: never; }) | undefined;
         SignatureRequired?: boolean | undefined;
-        IsActive?: boolean | undefined;
+        Status?: DocumentStatus | undefined;
     } & { [K_1 in Exclude<keyof I, keyof DocumentDetails>]: never; }>(base?: I | undefined): DocumentDetails;
     fromPartial<I_1 extends {
         OrganizationID?: string | undefined;
-        DocumentType?: DocumentType | undefined;
+        Name?: string | undefined;
         Version?: string | undefined;
+        Description?: string | undefined;
         File?: {
             Reference?: string | undefined;
             Extension?: string | undefined;
             Name?: string | undefined;
+            MD5SUM?: string | undefined;
         } | undefined;
         SignatureRequired?: boolean | undefined;
-        IsActive?: boolean | undefined;
+        Status?: DocumentStatus | undefined;
     } & {
         OrganizationID?: string | undefined;
-        DocumentType?: DocumentType | undefined;
+        Name?: string | undefined;
         Version?: string | undefined;
+        Description?: string | undefined;
         File?: ({
             Reference?: string | undefined;
             Extension?: string | undefined;
             Name?: string | undefined;
+            MD5SUM?: string | undefined;
         } & {
             Reference?: string | undefined;
             Extension?: string | undefined;
             Name?: string | undefined;
+            MD5SUM?: string | undefined;
         } & { [K_2 in Exclude<keyof I_1["File"], keyof File>]: never; }) | undefined;
         SignatureRequired?: boolean | undefined;
-        IsActive?: boolean | undefined;
+        Status?: DocumentStatus | undefined;
     } & { [K_3 in Exclude<keyof I_1, keyof DocumentDetails>]: never; }>(object: I_1): DocumentDetails;
 };
 export declare const File: {
@@ -284,19 +312,23 @@ export declare const File: {
         Reference?: string | undefined;
         Extension?: string | undefined;
         Name?: string | undefined;
+        MD5SUM?: string | undefined;
     } & {
         Reference?: string | undefined;
         Extension?: string | undefined;
         Name?: string | undefined;
+        MD5SUM?: string | undefined;
     } & { [K in Exclude<keyof I, keyof File>]: never; }>(base?: I | undefined): File;
     fromPartial<I_1 extends {
         Reference?: string | undefined;
         Extension?: string | undefined;
         Name?: string | undefined;
+        MD5SUM?: string | undefined;
     } & {
         Reference?: string | undefined;
         Extension?: string | undefined;
         Name?: string | undefined;
+        MD5SUM?: string | undefined;
     } & { [K_1 in Exclude<keyof I_1, keyof File>]: never; }>(object: I_1): File;
 };
 export declare const Documents: {
@@ -308,15 +340,17 @@ export declare const Documents: {
         Documents?: {
             Document?: {
                 OrganizationID?: string | undefined;
-                DocumentType?: DocumentType | undefined;
+                Name?: string | undefined;
                 Version?: string | undefined;
+                Description?: string | undefined;
                 File?: {
                     Reference?: string | undefined;
                     Extension?: string | undefined;
                     Name?: string | undefined;
+                    MD5SUM?: string | undefined;
                 } | undefined;
                 SignatureRequired?: boolean | undefined;
-                IsActive?: boolean | undefined;
+                Status?: DocumentStatus | undefined;
             } | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
@@ -335,15 +369,17 @@ export declare const Documents: {
         Documents?: ({
             Document?: {
                 OrganizationID?: string | undefined;
-                DocumentType?: DocumentType | undefined;
+                Name?: string | undefined;
                 Version?: string | undefined;
+                Description?: string | undefined;
                 File?: {
                     Reference?: string | undefined;
                     Extension?: string | undefined;
                     Name?: string | undefined;
+                    MD5SUM?: string | undefined;
                 } | undefined;
                 SignatureRequired?: boolean | undefined;
-                IsActive?: boolean | undefined;
+                Status?: DocumentStatus | undefined;
             } | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
@@ -359,15 +395,17 @@ export declare const Documents: {
         }[] & ({
             Document?: {
                 OrganizationID?: string | undefined;
-                DocumentType?: DocumentType | undefined;
+                Name?: string | undefined;
                 Version?: string | undefined;
+                Description?: string | undefined;
                 File?: {
                     Reference?: string | undefined;
                     Extension?: string | undefined;
                     Name?: string | undefined;
+                    MD5SUM?: string | undefined;
                 } | undefined;
                 SignatureRequired?: boolean | undefined;
-                IsActive?: boolean | undefined;
+                Status?: DocumentStatus | undefined;
             } | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
@@ -383,30 +421,35 @@ export declare const Documents: {
         } & {
             Document?: ({
                 OrganizationID?: string | undefined;
-                DocumentType?: DocumentType | undefined;
+                Name?: string | undefined;
                 Version?: string | undefined;
+                Description?: string | undefined;
                 File?: {
                     Reference?: string | undefined;
                     Extension?: string | undefined;
                     Name?: string | undefined;
+                    MD5SUM?: string | undefined;
                 } | undefined;
                 SignatureRequired?: boolean | undefined;
-                IsActive?: boolean | undefined;
+                Status?: DocumentStatus | undefined;
             } & {
                 OrganizationID?: string | undefined;
-                DocumentType?: DocumentType | undefined;
+                Name?: string | undefined;
                 Version?: string | undefined;
+                Description?: string | undefined;
                 File?: ({
                     Reference?: string | undefined;
                     Extension?: string | undefined;
                     Name?: string | undefined;
+                    MD5SUM?: string | undefined;
                 } & {
                     Reference?: string | undefined;
                     Extension?: string | undefined;
                     Name?: string | undefined;
+                    MD5SUM?: string | undefined;
                 } & { [K in Exclude<keyof I["Documents"][number]["Document"]["File"], keyof File>]: never; }) | undefined;
                 SignatureRequired?: boolean | undefined;
-                IsActive?: boolean | undefined;
+                Status?: DocumentStatus | undefined;
             } & { [K_1 in Exclude<keyof I["Documents"][number]["Document"], keyof DocumentDetails>]: never; }) | undefined;
             MetaData?: ({
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
@@ -431,15 +474,17 @@ export declare const Documents: {
         } & { [K_4 in Exclude<keyof I["Documents"][number], keyof Document>]: never; })[] & { [K_5 in Exclude<keyof I["Documents"], keyof {
             Document?: {
                 OrganizationID?: string | undefined;
-                DocumentType?: DocumentType | undefined;
+                Name?: string | undefined;
                 Version?: string | undefined;
+                Description?: string | undefined;
                 File?: {
                     Reference?: string | undefined;
                     Extension?: string | undefined;
                     Name?: string | undefined;
+                    MD5SUM?: string | undefined;
                 } | undefined;
                 SignatureRequired?: boolean | undefined;
-                IsActive?: boolean | undefined;
+                Status?: DocumentStatus | undefined;
             } | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
@@ -459,15 +504,17 @@ export declare const Documents: {
         Documents?: {
             Document?: {
                 OrganizationID?: string | undefined;
-                DocumentType?: DocumentType | undefined;
+                Name?: string | undefined;
                 Version?: string | undefined;
+                Description?: string | undefined;
                 File?: {
                     Reference?: string | undefined;
                     Extension?: string | undefined;
                     Name?: string | undefined;
+                    MD5SUM?: string | undefined;
                 } | undefined;
                 SignatureRequired?: boolean | undefined;
-                IsActive?: boolean | undefined;
+                Status?: DocumentStatus | undefined;
             } | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
@@ -486,15 +533,17 @@ export declare const Documents: {
         Documents?: ({
             Document?: {
                 OrganizationID?: string | undefined;
-                DocumentType?: DocumentType | undefined;
+                Name?: string | undefined;
                 Version?: string | undefined;
+                Description?: string | undefined;
                 File?: {
                     Reference?: string | undefined;
                     Extension?: string | undefined;
                     Name?: string | undefined;
+                    MD5SUM?: string | undefined;
                 } | undefined;
                 SignatureRequired?: boolean | undefined;
-                IsActive?: boolean | undefined;
+                Status?: DocumentStatus | undefined;
             } | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
@@ -510,15 +559,17 @@ export declare const Documents: {
         }[] & ({
             Document?: {
                 OrganizationID?: string | undefined;
-                DocumentType?: DocumentType | undefined;
+                Name?: string | undefined;
                 Version?: string | undefined;
+                Description?: string | undefined;
                 File?: {
                     Reference?: string | undefined;
                     Extension?: string | undefined;
                     Name?: string | undefined;
+                    MD5SUM?: string | undefined;
                 } | undefined;
                 SignatureRequired?: boolean | undefined;
-                IsActive?: boolean | undefined;
+                Status?: DocumentStatus | undefined;
             } | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
@@ -534,30 +585,35 @@ export declare const Documents: {
         } & {
             Document?: ({
                 OrganizationID?: string | undefined;
-                DocumentType?: DocumentType | undefined;
+                Name?: string | undefined;
                 Version?: string | undefined;
+                Description?: string | undefined;
                 File?: {
                     Reference?: string | undefined;
                     Extension?: string | undefined;
                     Name?: string | undefined;
+                    MD5SUM?: string | undefined;
                 } | undefined;
                 SignatureRequired?: boolean | undefined;
-                IsActive?: boolean | undefined;
+                Status?: DocumentStatus | undefined;
             } & {
                 OrganizationID?: string | undefined;
-                DocumentType?: DocumentType | undefined;
+                Name?: string | undefined;
                 Version?: string | undefined;
+                Description?: string | undefined;
                 File?: ({
                     Reference?: string | undefined;
                     Extension?: string | undefined;
                     Name?: string | undefined;
+                    MD5SUM?: string | undefined;
                 } & {
                     Reference?: string | undefined;
                     Extension?: string | undefined;
                     Name?: string | undefined;
+                    MD5SUM?: string | undefined;
                 } & { [K_7 in Exclude<keyof I_1["Documents"][number]["Document"]["File"], keyof File>]: never; }) | undefined;
                 SignatureRequired?: boolean | undefined;
-                IsActive?: boolean | undefined;
+                Status?: DocumentStatus | undefined;
             } & { [K_8 in Exclude<keyof I_1["Documents"][number]["Document"], keyof DocumentDetails>]: never; }) | undefined;
             MetaData?: ({
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
@@ -582,15 +638,17 @@ export declare const Documents: {
         } & { [K_11 in Exclude<keyof I_1["Documents"][number], keyof Document>]: never; })[] & { [K_12 in Exclude<keyof I_1["Documents"], keyof {
             Document?: {
                 OrganizationID?: string | undefined;
-                DocumentType?: DocumentType | undefined;
+                Name?: string | undefined;
                 Version?: string | undefined;
+                Description?: string | undefined;
                 File?: {
                     Reference?: string | undefined;
                     Extension?: string | undefined;
                     Name?: string | undefined;
+                    MD5SUM?: string | undefined;
                 } | undefined;
                 SignatureRequired?: boolean | undefined;
-                IsActive?: boolean | undefined;
+                Status?: DocumentStatus | undefined;
             } | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
@@ -614,72 +672,74 @@ export declare const UserDocumentCompliance: {
     toJSON(message: UserDocumentCompliance): unknown;
     create<I extends {
         SignedDocuments?: {
-            DocumentType?: DocumentType | undefined;
+            tName?: string | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
+            FileMD5SUM?: string | undefined;
         }[] | undefined;
-        ComplianceCheckedAt?: Date | undefined;
-        SigningRequired?: boolean | undefined;
     } & {
         SignedDocuments?: ({
-            DocumentType?: DocumentType | undefined;
+            tName?: string | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
+            FileMD5SUM?: string | undefined;
         }[] & ({
-            DocumentType?: DocumentType | undefined;
+            tName?: string | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
+            FileMD5SUM?: string | undefined;
         } & {
-            DocumentType?: DocumentType | undefined;
+            tName?: string | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
+            FileMD5SUM?: string | undefined;
         } & { [K in Exclude<keyof I["SignedDocuments"][number], keyof SignedDocument>]: never; })[] & { [K_1 in Exclude<keyof I["SignedDocuments"], keyof {
-            DocumentType?: DocumentType | undefined;
+            tName?: string | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
+            FileMD5SUM?: string | undefined;
         }[]>]: never; }) | undefined;
-        ComplianceCheckedAt?: Date | undefined;
-        SigningRequired?: boolean | undefined;
-    } & { [K_2 in Exclude<keyof I, keyof UserDocumentCompliance>]: never; }>(base?: I | undefined): UserDocumentCompliance;
+    } & { [K_2 in Exclude<keyof I, "SignedDocuments">]: never; }>(base?: I | undefined): UserDocumentCompliance;
     fromPartial<I_1 extends {
         SignedDocuments?: {
-            DocumentType?: DocumentType | undefined;
+            tName?: string | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
+            FileMD5SUM?: string | undefined;
         }[] | undefined;
-        ComplianceCheckedAt?: Date | undefined;
-        SigningRequired?: boolean | undefined;
     } & {
         SignedDocuments?: ({
-            DocumentType?: DocumentType | undefined;
+            tName?: string | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
+            FileMD5SUM?: string | undefined;
         }[] & ({
-            DocumentType?: DocumentType | undefined;
+            tName?: string | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
+            FileMD5SUM?: string | undefined;
         } & {
-            DocumentType?: DocumentType | undefined;
+            tName?: string | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
+            FileMD5SUM?: string | undefined;
         } & { [K_3 in Exclude<keyof I_1["SignedDocuments"][number], keyof SignedDocument>]: never; })[] & { [K_4 in Exclude<keyof I_1["SignedDocuments"], keyof {
-            DocumentType?: DocumentType | undefined;
+            tName?: string | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
+            FileMD5SUM?: string | undefined;
         }[]>]: never; }) | undefined;
-        ComplianceCheckedAt?: Date | undefined;
-        SigningRequired?: boolean | undefined;
-    } & { [K_5 in Exclude<keyof I_1, keyof UserDocumentCompliance>]: never; }>(object: I_1): UserDocumentCompliance;
+    } & { [K_5 in Exclude<keyof I_1, "SignedDocuments">]: never; }>(object: I_1): UserDocumentCompliance;
 };
 export declare const SignedDocument: {
     encode(message: SignedDocument, writer?: _m0.Writer): _m0.Writer;
@@ -687,26 +747,30 @@ export declare const SignedDocument: {
     fromJSON(object: any): SignedDocument;
     toJSON(message: SignedDocument): unknown;
     create<I extends {
-        DocumentType?: DocumentType | undefined;
+        tName?: string | undefined;
         SignedVersion?: string | undefined;
         DocumentState?: DocumentState | undefined;
         SignedAt?: Date | undefined;
+        FileMD5SUM?: string | undefined;
     } & {
-        DocumentType?: DocumentType | undefined;
+        tName?: string | undefined;
         SignedVersion?: string | undefined;
         DocumentState?: DocumentState | undefined;
         SignedAt?: Date | undefined;
+        FileMD5SUM?: string | undefined;
     } & { [K in Exclude<keyof I, keyof SignedDocument>]: never; }>(base?: I | undefined): SignedDocument;
     fromPartial<I_1 extends {
-        DocumentType?: DocumentType | undefined;
+        tName?: string | undefined;
         SignedVersion?: string | undefined;
         DocumentState?: DocumentState | undefined;
         SignedAt?: Date | undefined;
+        FileMD5SUM?: string | undefined;
     } & {
-        DocumentType?: DocumentType | undefined;
+        tName?: string | undefined;
         SignedVersion?: string | undefined;
         DocumentState?: DocumentState | undefined;
         SignedAt?: Date | undefined;
+        FileMD5SUM?: string | undefined;
     } & { [K_1 in Exclude<keyof I_1, keyof SignedDocument>]: never; }>(object: I_1): SignedDocument;
 };
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
