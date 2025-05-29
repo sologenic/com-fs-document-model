@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package document;
+
+option go_package = "github.com/sologenic/com-fs-document-model;document";
+
+import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
+import "document.proto";
+
+
+enum Order {
+    NOT_USED_ORDER = 0;
+    CREATED_AT = 1;
+    UPDATED_AT = 2;
+}
+
+message ListRequest {
+    optional string UserID = 1;
+    optional string InquiryID = 2;
+    optional DocumentType DocumentType = 3;
+    optional bool SignatureRequired = 4;
+    string OrganizationID = 5;
+    metadata.Network Network = 6;
+    optional int32 Offset = 7;
+    optional Order OrderBy = 8;
+}
+
+message SignedDocumentRequest {
+    string DocumentID = 1;
+    string OrganizationID = 2;
+    metadata.Network Network = 3;
+}

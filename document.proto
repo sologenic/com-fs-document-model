@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package document;
+
+option go_package = "github.com/sologenic/com-fs-document-model;document";
+
+import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
+import "sologenic/com-fs-utils-lib/models/audit/audit.proto";
+
+
+message DocumentID {
+    string DocumentID = 1;
+    string OrganizationID = 2;
+    optional metadata.Network Network = 3; 
+}
+
+enum DocumentType {
+    NOT_USED_TYPE =0;
+    PRIVACY = 1;
+    REGULATORY = 2;
+    INFORMATION = 3;
+    MARGIN = 4;
+    SHORT = 5;
+}
+
+message DocumentDetails {
+    string DocumentID = 1;
+    string InquiryID = 2;
+    string OrganizationID = 3;
+    string UserID = 4;
+    string FileName = 5;
+    string FileURL = 6;
+    DocumentType DocumentType = 7;
+    string Version = 8;
+    optional bool Signed = 9;
+    optional bool AdminSigned = 10; // This one might be removed later.
+    bool SignatureRequired = 11;
+}
+
+message Document {
+    DocumentDetails Document = 1;
+    metadata.MetaData MetaData = 2; 
+    audit.Audit Audit = 3;
+}
+
+message DocumentList {
+    repeated Document Documents = 1;
+    int32 Offset = 2;
+}

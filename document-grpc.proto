@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package document;
+
+option go_package = "github.com/sologenic/com-fs-document-model;document";
+
+import "document.proto";
+import "document-requests.proto";
+import "google/protobuf/empty.proto";
+
+service DocumentService {
+    rpc Get (DocumentID) returns (Document) {}
+    rpc Upsert (Document) returns (DocumentID) {}
+    rpc List (ListRequest) returns (DocumentList) {}
+    rpc SignDocument (SignedDocumentRequest) returns (google.protobuf.Empty) {}
+}
