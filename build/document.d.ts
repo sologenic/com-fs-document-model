@@ -59,7 +59,7 @@ export interface UserDocumentCompliance {
     SignedDocuments: SignedDocument[];
 }
 export interface SignedDocument {
-    tName: string;
+    Name: string;
     /** The version of the document that was signed. This may differ from the current/latest version. */
     SignedVersion: string;
     DocumentState: DocumentState;
@@ -672,7 +672,7 @@ export declare const UserDocumentCompliance: {
     toJSON(message: UserDocumentCompliance): unknown;
     create<I extends {
         SignedDocuments?: {
-            tName?: string | undefined;
+            Name?: string | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
@@ -680,25 +680,25 @@ export declare const UserDocumentCompliance: {
         }[] | undefined;
     } & {
         SignedDocuments?: ({
-            tName?: string | undefined;
+            Name?: string | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
             FileMD5SUM?: string | undefined;
         }[] & ({
-            tName?: string | undefined;
+            Name?: string | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
             FileMD5SUM?: string | undefined;
         } & {
-            tName?: string | undefined;
+            Name?: string | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
             FileMD5SUM?: string | undefined;
         } & { [K in Exclude<keyof I["SignedDocuments"][number], keyof SignedDocument>]: never; })[] & { [K_1 in Exclude<keyof I["SignedDocuments"], keyof {
-            tName?: string | undefined;
+            Name?: string | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
@@ -707,7 +707,7 @@ export declare const UserDocumentCompliance: {
     } & { [K_2 in Exclude<keyof I, "SignedDocuments">]: never; }>(base?: I | undefined): UserDocumentCompliance;
     fromPartial<I_1 extends {
         SignedDocuments?: {
-            tName?: string | undefined;
+            Name?: string | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
@@ -715,25 +715,25 @@ export declare const UserDocumentCompliance: {
         }[] | undefined;
     } & {
         SignedDocuments?: ({
-            tName?: string | undefined;
+            Name?: string | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
             FileMD5SUM?: string | undefined;
         }[] & ({
-            tName?: string | undefined;
+            Name?: string | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
             FileMD5SUM?: string | undefined;
         } & {
-            tName?: string | undefined;
+            Name?: string | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
             FileMD5SUM?: string | undefined;
         } & { [K_3 in Exclude<keyof I_1["SignedDocuments"][number], keyof SignedDocument>]: never; })[] & { [K_4 in Exclude<keyof I_1["SignedDocuments"], keyof {
-            tName?: string | undefined;
+            Name?: string | undefined;
             SignedVersion?: string | undefined;
             DocumentState?: DocumentState | undefined;
             SignedAt?: Date | undefined;
@@ -747,26 +747,26 @@ export declare const SignedDocument: {
     fromJSON(object: any): SignedDocument;
     toJSON(message: SignedDocument): unknown;
     create<I extends {
-        tName?: string | undefined;
+        Name?: string | undefined;
         SignedVersion?: string | undefined;
         DocumentState?: DocumentState | undefined;
         SignedAt?: Date | undefined;
         FileMD5SUM?: string | undefined;
     } & {
-        tName?: string | undefined;
+        Name?: string | undefined;
         SignedVersion?: string | undefined;
         DocumentState?: DocumentState | undefined;
         SignedAt?: Date | undefined;
         FileMD5SUM?: string | undefined;
     } & { [K in Exclude<keyof I, keyof SignedDocument>]: never; }>(base?: I | undefined): SignedDocument;
     fromPartial<I_1 extends {
-        tName?: string | undefined;
+        Name?: string | undefined;
         SignedVersion?: string | undefined;
         DocumentState?: DocumentState | undefined;
         SignedAt?: Date | undefined;
         FileMD5SUM?: string | undefined;
     } & {
-        tName?: string | undefined;
+        Name?: string | undefined;
         SignedVersion?: string | undefined;
         DocumentState?: DocumentState | undefined;
         SignedAt?: Date | undefined;
