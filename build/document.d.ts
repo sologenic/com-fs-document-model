@@ -29,7 +29,7 @@ export interface Document {
     MetaData: MetaData | undefined;
     Audit: Audit | undefined;
 }
-/** Key format: OrganizationID_Name_Version */
+/** Key format: OrganizationID_File.MD5SUM */
 export interface DocumentDetails {
     OrganizationID: string;
     Name: string;

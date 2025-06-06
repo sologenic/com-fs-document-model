@@ -15,8 +15,7 @@ service DocumentService {
 
 message DocumentID {
     string OrganizationID = 1;
-    string Name = 2;
-    string Version = 3;
+    string MD5SUM = 2;
 }
 
 message Filter {

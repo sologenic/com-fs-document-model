@@ -14,7 +14,7 @@ message Document {
     audit.Audit Audit = 3;
 }
 
-// Key format: OrganizationID_Name_Version
+// Key format: OrganizationID_File.MD5SUM
 message DocumentDetails {
     string OrganizationID = 1;
     string Name = 2;
