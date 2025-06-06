@@ -43,7 +43,7 @@ message UserDocumentCompliance {
 }
 
 message SignedDocument {
-    string tName = 1;
+    string Name = 1;
     string SignedVersion = 2; // The version of the document that was signed. This may differ from the current/latest version.
     DocumentState DocumentState = 3;
     google.protobuf.Timestamp SignedAt = 4;
