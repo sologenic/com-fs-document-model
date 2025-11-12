@@ -48,6 +48,7 @@ message SignedDocument {
     DocumentState DocumentState = 3;
     google.protobuf.Timestamp SignedAt = 4;
     string FileMD5SUM = 5; // MD5 checksum of the file that was signed
+    string TXID = 6; // Transaction ID of the signed document (e.g. from the blockchain)
 }
 
 enum DocumentStatus {
