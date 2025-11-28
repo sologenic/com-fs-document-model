@@ -14,12 +14,11 @@
 
 ## Overview
 
-The Document provides a comprehensive data structure for managing document within the system. This model supports status management: tracks status for administrative control, pagination support: provides offset-based pagination for collections, identification: provides unique identifiers for document, and more. 
+The Document provides a comprehensive data structure for managing document within the system. This model supports status management: tracks status for administrative control, pagination support: provides offset-based pagination for collections, and more. 
 
 Key features of the {model_name.lower()} model include:
 - **Status Management**: Tracks status for administrative control
 - **Pagination Support**: Provides offset-based pagination for collections
-- **Identification**: Provides unique identifiers for document
 
 ## document.proto
 
@@ -42,10 +41,8 @@ The `Document` message provides document data and operations.
 
 | Field Name | Type | Required/Optional | Description |
 |------------|------|-------------------|-------------|
-| Version | `string` | Required | Version value |
 | Description | `string` | Required | Additional descriptive information about this item |
 | File | `File` | Required | File field |
-| SignatureRequired | `bool` | Required | SignatureRequired field |
 | Status | `DocumentStatus` | Required | Current status of this item (see related enum) |
 
 **Use Cases:**
@@ -65,10 +62,7 @@ The `File` message provides file data and operations.
 
 | Field Name | Type | Required/Optional | Description |
 |------------|------|-------------------|-------------|
-| Reference | `string` | Required | Reference value |
 | Extension | `string` | Required | Extension value |
-| Name | `string` | Optional | The name of this item |
-| MD5SUM | `string` | Required | MD5SUM value |
 
 **Use Cases:**
 - Creating new file records
@@ -107,11 +101,8 @@ The `UserDocumentCompliance` message provides userdocumentcompliance data and op
 
 | Field Name | Type | Required/Optional | Description |
 |------------|------|-------------------|-------------|
-| SignedVersion | `string` | Required | SignedVersion value |
 | DocumentState | `DocumentState` | Required | DocumentState field |
 | SignedAt | `google.protobuf.Timestamp` | Required | SignedAt field |
-| FileMD5SUM | `string` | Required | FileMD5SUM value |
-| TXID | `string` | Required | Unique identifier for the tx |
 
 **Use Cases:**
 - Creating new userdocumentcompliance records
@@ -119,7 +110,7 @@ The `UserDocumentCompliance` message provides userdocumentcompliance data and op
 - Updating userdocumentcompliance data
 
 **Important Notes:**
-- The `TXID` field must match a valid identifier format
+- This message provides the userdocumentcompliance representation
 
 ## Version Information
 
