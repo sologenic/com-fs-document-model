@@ -6,17 +6,21 @@
 - [document.proto](#document)
   - [Messages](#messages)
     - [Document](#document)
+    - [DocumentDetails](#documentdetails)
     - [File](#file)
     - [Documents](#documents)
     - [UserDocumentCompliance](#userdocumentcompliance)
+    - [SignedDocument](#signeddocument)
 - [Version Information](#version-information)
 - [Support](#support)
 
 ## Overview
 
-The Document provides a comprehensive data structure for managing document within the system. This model supports status management: tracks status for administrative control, pagination support: provides offset-based pagination for collections, identification: provides unique identifiers for document, and more. 
+The Document provides a comprehensive data structure for managing document within the system. This model supports metadata and audit: includes metadata and audit trails for tracking changes, organizational context: links items to organizations via organizationid, status management: tracks status for administrative control, and more. 
 
 Key features of the {model_name.lower()} model include:
+- **Metadata and Audit**: Includes metadata and audit trails for tracking changes
+- **Organizational Context**: Links items to organizations via OrganizationID
 - **Status Management**: Tracks status for administrative control
 - **Pagination Support**: Provides offset-based pagination for collections
 - **Identification**: Provides unique identifiers for document
@@ -42,6 +46,28 @@ The `Document` message provides document data and operations.
 
 | Field Name | Type | Required/Optional | Description |
 |------------|------|-------------------|-------------|
+| Document | `DocumentDetails` | Required | Document field |
+| MetaData | `metadata.MetaData` | Required | Network is not to be assigned (documents are network agnostic) |
+| Audit | `audit.Audit` | Required | Audit trail information for tracking changes and access |
+
+**Use Cases:**
+- Creating new document records
+- Retrieving document information
+- Updating document data
+
+**Important Notes:**
+- This message provides the document representation
+
+#### DocumentDetails {#documentdetails}
+
+The `DocumentDetails` message contains all the core information about a document, including essential details and metadata.
+
+**Field Table:**
+
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| OrganizationID | `string` | Required | UUID of the organization this item belongs to |
+| Name | `string` | Required | The name of this item |
 | Version | `string` | Required | Latest version of the document |
 | Description | `string` | Required | Additional descriptive information about this item |
 | File | `File` | Required | File field |
@@ -49,12 +75,13 @@ The `Document` message provides document data and operations.
 | Status | `DocumentStatus` | Required | Current status of this item (see related enum) |
 
 **Use Cases:**
-- Creating new document records
-- Retrieving document information
-- Updating document data
+- Creating new document records with complete information
+- Updating document information
+- Associating items with specific organizations
 - Tracking status for administrative purposes
 
 **Important Notes:**
+- The `OrganizationID` must be a valid UUID format
 - The `Status` field determines the current state of this item
 
 #### File {#file}
@@ -107,6 +134,25 @@ The `UserDocumentCompliance` message provides userdocumentcompliance data and op
 
 | Field Name | Type | Required/Optional | Description |
 |------------|------|-------------------|-------------|
+| SignedDocuments | `SignedDocument` | Optional | SignedDocuments field |
+
+**Use Cases:**
+- Creating new userdocumentcompliance records
+- Retrieving userdocumentcompliance information
+- Updating userdocumentcompliance data
+
+**Important Notes:**
+- This message provides the userdocumentcompliance representation
+
+#### SignedDocument {#signeddocument}
+
+The `SignedDocument` message provides signeddocument data and operations.
+
+**Field Table:**
+
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| Name | `string` | Required | The name of this item |
 | SignedVersion | `string` | Required | The version of the document that was signed. This may differ from the current/latest version. |
 | DocumentState | `DocumentState` | Required | DocumentState field |
 | SignedAt | `google.protobuf.Timestamp` | Required | SignedAt field |
@@ -114,9 +160,9 @@ The `UserDocumentCompliance` message provides userdocumentcompliance data and op
 | TXID | `string` | Required | Transaction ID of the signed document (e.g. from the blockchain) |
 
 **Use Cases:**
-- Creating new userdocumentcompliance records
-- Retrieving userdocumentcompliance information
-- Updating userdocumentcompliance data
+- Creating new signeddocument records
+- Retrieving signeddocument information
+- Updating signeddocument data
 
 **Important Notes:**
 - The `TXID` field must match a valid identifier format
