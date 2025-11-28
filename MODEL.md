@@ -14,11 +14,12 @@
 
 ## Overview
 
-The Document provides a comprehensive data structure for managing document within the system. This model supports status management: tracks status for administrative control, pagination support: provides offset-based pagination for collections, and more. 
+The Document provides a comprehensive data structure for managing document within the system. This model supports status management: tracks status for administrative control, pagination support: provides offset-based pagination for collections, identification: provides unique identifiers for document, and more. 
 
 Key features of the {model_name.lower()} model include:
 - **Status Management**: Tracks status for administrative control
 - **Pagination Support**: Provides offset-based pagination for collections
+- **Identification**: Provides unique identifiers for document
 
 ## document.proto
 
@@ -41,8 +42,10 @@ The `Document` message provides document data and operations.
 
 | Field Name | Type | Required/Optional | Description |
 |------------|------|-------------------|-------------|
+| Version | `string` | Required | Latest version of the document |
 | Description | `string` | Required | Additional descriptive information about this item |
 | File | `File` | Required | File field |
+| SignatureRequired | `bool` | Required | if false, the document is for display/reference only |
 | Status | `DocumentStatus` | Required | Current status of this item (see related enum) |
 
 **Use Cases:**
@@ -62,7 +65,10 @@ The `File` message provides file data and operations.
 
 | Field Name | Type | Required/Optional | Description |
 |------------|------|-------------------|-------------|
+| Reference | `string` | Required | The reference to the file |
 | Extension | `string` | Required | Extension value |
+| Name | `string` | Optional | User defined name of the file, used as a "description" and not to reference the file |
+| MD5SUM | `string` | Required | MD5 checksum of the file for integrity verification |
 
 **Use Cases:**
 - Creating new file records
@@ -101,8 +107,11 @@ The `UserDocumentCompliance` message provides userdocumentcompliance data and op
 
 | Field Name | Type | Required/Optional | Description |
 |------------|------|-------------------|-------------|
+| SignedVersion | `string` | Required | The version of the document that was signed. This may differ from the current/latest version. |
 | DocumentState | `DocumentState` | Required | DocumentState field |
 | SignedAt | `google.protobuf.Timestamp` | Required | SignedAt field |
+| FileMD5SUM | `string` | Required | MD5 checksum of the file that was signed |
+| TXID | `string` | Required | Transaction ID of the signed document (e.g. from the blockchain) |
 
 **Use Cases:**
 - Creating new userdocumentcompliance records
@@ -110,7 +119,7 @@ The `UserDocumentCompliance` message provides userdocumentcompliance data and op
 - Updating userdocumentcompliance data
 
 **Important Notes:**
-- This message provides the userdocumentcompliance representation
+- The `TXID` field must match a valid identifier format
 
 ## Version Information
 
