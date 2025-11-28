@@ -11,6 +11,9 @@
     - [Documents](#documents)
     - [UserDocumentCompliance](#userdocumentcompliance)
     - [SignedDocument](#signeddocument)
+  - [Enums](#enums)
+    - [DocumentStatus](#documentstatus)
+    - [DocumentState](#documentstate)
 - [Version Information](#version-information)
 - [Support](#support)
 
@@ -166,6 +169,54 @@ The `SignedDocument` message provides signeddocument data and operations.
 
 **Important Notes:**
 - The `TXID` field must match a valid identifier format
+
+### Enums
+
+#### DocumentStatus {#documentstatus}
+
+The `DocumentStatus` enum defines the possible states or types for document, allowing for classification and state management.
+
+**Value Table:**
+
+| Value Name | Number | Description |
+|------------|--------|-------------|
+| NOT_USED_STATUS | 0 | Default/unused value (protobuf convention) |
+| UNPUBLISHED | 1 | Unpublished state or type |
+| ACTIVE | 2 | Active state or type |
+| OUTDATED | 3 | Outdated state or type |
+
+**Use Cases:**
+- Setting documentstatus for items
+- Filtering items by documentstatus in queries
+- Enforcing business logic based on documentstatus
+
+**Important Notes:**
+- Values with `NOT_USED` prefix or number 0 follow protobuf conventions for default enum values and should not be actively used
+- Only valid documentstatus values should be used in production code
+- DocumentStatus changes should be tracked in audit trails for compliance purposes
+
+#### DocumentState {#documentstate}
+
+The `DocumentState` enum defines the possible states or types for document, allowing for classification and state management.
+
+**Value Table:**
+
+| Value Name | Number | Description |
+|------------|--------|-------------|
+| NOT_USED_STATE | 0 | Default/unused value (protobuf convention) |
+| TO_BE_SIGNED | 1 | To Be Signed state or type |
+| SIGNED | 2 | Signed state or type |
+| DISPLAY_ONLY | 3 | Display Only state or type |
+
+**Use Cases:**
+- Setting documentstate for items
+- Filtering items by documentstate in queries
+- Enforcing business logic based on documentstate
+
+**Important Notes:**
+- Values with `NOT_USED` prefix or number 0 follow protobuf conventions for default enum values and should not be actively used
+- Only valid documentstate values should be used in production code
+- DocumentState changes should be tracked in audit trails for compliance purposes
 
 ## Version Information
 
