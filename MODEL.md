@@ -18,7 +18,7 @@
 
 The Document provides a comprehensive data structure for managing document within the system. This model supports metadata and audit: includes metadata and audit trails for tracking changes, organizational context: links items to organizations via organizationid, status management: tracks status for administrative control, and more. 
 
-Key features of the {model_name.lower()} model include:
+Key features of the document model include:
 - **Metadata and Audit**: Includes metadata and audit trails for tracking changes
 - **Organizational Context**: Links items to organizations via OrganizationID
 - **Status Management**: Tracks status for administrative control
@@ -155,7 +155,7 @@ The `SignedDocument` message provides signeddocument data and operations.
 | Name | `string` | Required | The name of this item |
 | SignedVersion | `string` | Required | The version of the document that was signed. This may differ from the current/latest version. |
 | DocumentState | `DocumentState` | Required | DocumentState field |
-| SignedAt | `google.protobuf.Timestamp` | Required | SignedAt field |
+| SignedAt | `google.protobuf.Timestamp` | Required | Timestamp information |
 | FileMD5SUM | `string` | Required | MD5 checksum of the file that was signed |
 | TXID | `string` | Required | Transaction ID of the signed document (e.g. from the blockchain) |
 
