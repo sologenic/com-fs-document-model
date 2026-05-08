@@ -3,9 +3,9 @@ module github.com/sologenic/com-fs-document-model
 go 1.26.2
 
 require (
-	github.com/sologenic/com-fs-utils-internal-lib/go/grpc-client v0.0.0-20260130172224-843f6dae3696
-	github.com/sologenic/com-fs-utils-lib/models/audit v0.0.0-20260130170755-ffa545a27df1
-	github.com/sologenic/com-fs-utils-lib/models/metadata v0.0.0-20260130170755-ffa545a27df1
+	github.com/sologenic/com-fs-utils-internal-lib/go/grpc-client v0.0.0-20260429144456-e78936df6303
+	github.com/sologenic/com-fs-utils-lib/models/audit v0.0.0-20260501113306-8b02db1b65e4
+	github.com/sologenic/com-fs-utils-lib/models/metadata v0.0.0-20260501113306-8b02db1b65e4
 	google.golang.org/grpc v1.71.1
 	google.golang.org/protobuf v1.36.6
 )
@@ -21,7 +21,7 @@ require (
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rs/zerolog v1.33.0 // indirect
-	github.com/sologenic/com-fs-utils-internal-lib/go/logger v0.0.0-20260130172224-843f6dae3696 // indirect
+	github.com/sologenic/com-fs-utils-internal-lib/go/logger v0.0.0-20260429144456-e78936df6303 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	golang.org/x/crypto v0.32.0 // indirect
 	golang.org/x/net v0.34.0 // indirect
