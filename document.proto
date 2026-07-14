@@ -37,9 +37,8 @@ message DocumentDetails {
       }
     ]; // Latest version of the document
     string Description = 4 [
-      (buf.validate.field).ignore = IGNORE_IF_ZERO_VALUE,
       (buf.validate.field).string = {
-        max_len: 2048
+        max_len: 512
       }
     ];
     File File = 5 [
@@ -52,22 +51,19 @@ message DocumentDetails {
 }
 
 message File {
+    reserved 2;
+    reserved "Extension";
+
     string Reference = 1 [
       (buf.validate.field).string = {
-        min_len: 1,
-        max_len: 512
+        uri: true,
+        prefix: "gs://",
+        max_len: 256
       }
     ]; // The reference to the file
-    string Extension = 2 [
-      (buf.validate.field).string = {
-        min_len: 1,
-        max_len: 16
-      }
-    ];
     optional string Name = 3 [
-      (buf.validate.field).ignore = IGNORE_IF_ZERO_VALUE,
       (buf.validate.field).string = {
-        max_len: 256
+        max_len: 128
       }
     ]; // User defined name of the file, used as a "description" and not to reference the file
     string MD5SUM = 4 [
@@ -132,9 +128,7 @@ message SignedDocument {
         not_in: [0]
       }
     ];
-    google.protobuf.Timestamp SignedAt = 4 [
-      (buf.validate.field).ignore = IGNORE_IF_ZERO_VALUE
-    ];
+    google.protobuf.Timestamp SignedAt = 4;
     string FileMD5SUM = 5 [
       (buf.validate.field).string = {
         pattern: "^[a-fA-F0-9]{32}$"
@@ -143,6 +137,7 @@ message SignedDocument {
     string TXID = 6 [
       (buf.validate.field).ignore = IGNORE_IF_ZERO_VALUE,
       (buf.validate.field).string = {
+        pattern: "^[a-fA-F0-9]+$",
         max_len: 128
       }
     ]; // Transaction ID of the signed document (e.g. from the blockchain)

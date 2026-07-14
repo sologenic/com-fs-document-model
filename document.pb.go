@@ -285,9 +285,8 @@ func (x *DocumentDetails) GetStatus() DocumentStatus {
 type File struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Reference     string                 `protobuf:"bytes,1,opt,name=Reference,proto3" json:"Reference,omitempty"` // The reference to the file
-	Extension     string                 `protobuf:"bytes,2,opt,name=Extension,proto3" json:"Extension,omitempty"`
-	Name          *string                `protobuf:"bytes,3,opt,name=Name,proto3,oneof" json:"Name,omitempty"` // User defined name of the file, used as a "description" and not to reference the file
-	MD5SUM        string                 `protobuf:"bytes,4,opt,name=MD5SUM,proto3" json:"MD5SUM,omitempty"`   // MD5 checksum of the file for integrity verification
+	Name          *string                `protobuf:"bytes,3,opt,name=Name,proto3,oneof" json:"Name,omitempty"`     // User defined name of the file, used as a "description" and not to reference the file
+	MD5SUM        string                 `protobuf:"bytes,4,opt,name=MD5SUM,proto3" json:"MD5SUM,omitempty"`       // MD5 checksum of the file for integrity verification
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -325,13 +324,6 @@ func (*File) Descriptor() ([]byte, []int) {
 func (x *File) GetReference() string {
 	if x != nil {
 		return x.Reference
-	}
-	return ""
-}
-
-func (x *File) GetExtension() string {
-	if x != nil {
-		return x.Extension
 	}
 	return ""
 }
@@ -584,23 +576,21 @@ const file_document_proto_rawDesc = "" +
 	"\bDocument\x12=\n" +
 	"\bDocument\x18\x01 \x01(\v2\x19.document.DocumentDetailsB\x06\xbaH\x03\xc8\x01\x01R\bDocument\x12.\n" +
 	"\bMetaData\x18\x02 \x01(\v2\x12.metadata.MetaDataR\bMetaData\x12\"\n" +
-	"\x05Audit\x18\x03 \x01(\v2\f.audit.AuditR\x05Audit\"\xcd\x02\n" +
+	"\x05Audit\x18\x03 \x01(\v2\f.audit.AuditR\x05Audit\"\xca\x02\n" +
 	"\x0fDocumentDetails\x120\n" +
 	"\x0eOrganizationID\x18\x01 \x01(\tB\b\xbaH\x05r\x03\xb0\x01\x01R\x0eOrganizationID\x12\x1e\n" +
 	"\x04Name\x18\x02 \x01(\tB\n" +
 	"\xbaH\ar\x05\x10\x01\x18\x80\x01R\x04Name\x12#\n" +
-	"\aVersion\x18\x03 \x01(\tB\t\xbaH\x06r\x04\x10\x01\x18 R\aVersion\x12-\n" +
-	"\vDescription\x18\x04 \x01(\tB\v\xbaH\b\xd8\x01\x01r\x03\x18\x80\x10R\vDescription\x12*\n" +
+	"\aVersion\x18\x03 \x01(\tB\t\xbaH\x06r\x04\x10\x01\x18 R\aVersion\x12*\n" +
+	"\vDescription\x18\x04 \x01(\tB\b\xbaH\x05r\x03\x18\x80\x04R\vDescription\x12*\n" +
 	"\x04File\x18\x05 \x01(\v2\x0e.document.FileB\x06\xbaH\x03\xc8\x01\x01R\x04File\x12,\n" +
 	"\x11SignatureRequired\x18\x06 \x01(\bR\x11SignatureRequired\x12:\n" +
-	"\x06Status\x18\a \x01(\x0e2\x18.document.DocumentStatusB\b\xbaH\x05\x82\x01\x02\x10\x01R\x06Status\"\xba\x01\n" +
-	"\x04File\x12(\n" +
-	"\tReference\x18\x01 \x01(\tB\n" +
-	"\xbaH\ar\x05\x10\x01\x18\x80\x04R\tReference\x12'\n" +
-	"\tExtension\x18\x02 \x01(\tB\t\xbaH\x06r\x04\x10\x01\x18\x10R\tExtension\x12$\n" +
-	"\x04Name\x18\x03 \x01(\tB\v\xbaH\b\xd8\x01\x01r\x03\x18\x80\x02H\x00R\x04Name\x88\x01\x01\x120\n" +
+	"\x06Status\x18\a \x01(\x0e2\x18.document.DocumentStatusB\b\xbaH\x05\x82\x01\x02\x10\x01R\x06Status\"\xa7\x01\n" +
+	"\x04File\x120\n" +
+	"\tReference\x18\x01 \x01(\tB\x12\xbaH\x0fr\r\x18\x80\x02:\x05gs://\x88\x01\x01R\tReference\x12!\n" +
+	"\x04Name\x18\x03 \x01(\tB\b\xbaH\x05r\x03\x18\x80\x01H\x00R\x04Name\x88\x01\x01\x120\n" +
 	"\x06MD5SUM\x18\x04 \x01(\tB\x18\xbaH\x15r\x132\x11^[a-fA-F0-9]{32}$R\x06MD5SUMB\a\n" +
-	"\x05_Name\"U\n" +
+	"\x05_NameJ\x04\b\x02\x10\x03R\tExtension\"U\n" +
 	"\tDocuments\x120\n" +
 	"\tDocuments\x18\x01 \x03(\v2\x12.document.DocumentR\tDocuments\x12\x16\n" +
 	"\x06Offset\x18\x02 \x01(\x05R\x06Offset\"\x81\x02\n" +
@@ -610,18 +600,18 @@ const file_document_proto_rawDesc = "" +
 	"\x0fSignedDocuments\x12N\n" +
 	"\x0fSignedDocuments\x18\x01 \x03(\v2\x18.document.SignedDocumentB\n" +
 	"\xbaH\a\x92\x01\x04\b\x01\x10@R\x0fSignedDocuments:\x8f\x01\xbaH\x8b\x01\x1a\x88\x01\n" +
-	"#signed_documents.unique_file_md5sum\x12-SignedDocuments contains duplicate FileMD5SUM\x1a2this.SignedDocuments.map(d, d.FileMD5SUM).unique()\"\xc7\x02\n" +
+	"#signed_documents.unique_file_md5sum\x12-SignedDocuments contains duplicate FileMD5SUM\x1a2this.SignedDocuments.map(d, d.FileMD5SUM).unique()\"\xcf\x02\n" +
 	"\x0eSignedDocument\x12\x1e\n" +
 	"\x04Name\x18\x01 \x01(\tB\n" +
 	"\xbaH\ar\x05\x10\x01\x18\x80\x01R\x04Name\x12/\n" +
 	"\rSignedVersion\x18\x02 \x01(\tB\t\xbaH\x06r\x04\x10\x01\x18 R\rSignedVersion\x12I\n" +
 	"\rDocumentState\x18\x03 \x01(\x0e2\x17.document.DocumentStateB\n" +
-	"\xbaH\a\x82\x01\x04\x10\x01 \x00R\rDocumentState\x12>\n" +
-	"\bSignedAt\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampB\x06\xbaH\x03\xd8\x01\x01R\bSignedAt\x128\n" +
+	"\xbaH\a\x82\x01\x04\x10\x01 \x00R\rDocumentState\x126\n" +
+	"\bSignedAt\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\bSignedAt\x128\n" +
 	"\n" +
 	"FileMD5SUM\x18\x05 \x01(\tB\x18\xbaH\x15r\x132\x11^[a-fA-F0-9]{32}$R\n" +
-	"FileMD5SUM\x12\x1f\n" +
-	"\x04TXID\x18\x06 \x01(\tB\v\xbaH\b\xd8\x01\x01r\x03\x18\x80\x01R\x04TXID*P\n" +
+	"FileMD5SUM\x12/\n" +
+	"\x04TXID\x18\x06 \x01(\tB\x1b\xbaH\x18\xd8\x01\x01r\x13\x18\x80\x012\x0e^[a-fA-F0-9]+$R\x04TXID*P\n" +
 	"\x0eDocumentStatus\x12\x13\n" +
 	"\x0fNOT_USED_STATUS\x10\x00\x12\x0f\n" +
 	"\vUNPUBLISHED\x10\x01\x12\n" +
