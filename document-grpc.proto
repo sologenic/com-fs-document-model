@@ -6,6 +6,7 @@ option go_package = "github.com/sologenic/com-fs-document-model;document";
 
 import "google/protobuf/empty.proto";
 import "document.proto";
+import "buf/validate/validate.proto";
 
 service DocumentService {
     rpc Get (DocumentID) returns (Document) {}
@@ -14,15 +15,43 @@ service DocumentService {
 }
 
 message DocumentID {
-    string OrganizationID = 1;
-    string MD5SUM = 2;
+    string OrganizationID = 1 [
+      (buf.validate.field).string = {
+        uuid: true
+      }
+    ];
+    string MD5SUM = 2 [
+      (buf.validate.field).string = {
+        pattern: "^[a-fA-F0-9]{32}$"
+      }
+    ];
 }
 
 message Filter {
-    string OrganizationID = 1;
-    optional string Name = 2;
+    string OrganizationID = 1 [
+      (buf.validate.field).string = {
+        uuid: true
+      }
+    ];
+    optional string Name = 2 [
+      (buf.validate.field).ignore = IGNORE_IF_ZERO_VALUE,
+      (buf.validate.field).string = {
+        max_len: 128
+      }
+    ];
     optional bool SignatureRequired = 3;
-    optional DocumentStatus Status = 4;
-    optional int32 Offset = 5;
-    optional int32 Limit = 6;
+    optional DocumentStatus Status = 4 [
+      (buf.validate.field).enum.defined_only = true
+    ];
+    optional int32 Offset = 5 [
+      (buf.validate.field).int32 = {
+        gte: 0
+      }
+    ];
+    optional int32 Limit = 6 [
+      (buf.validate.field).int32 = {
+        gte: 0,
+        lte: 1000
+      }
+    ];
 }

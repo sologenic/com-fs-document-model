@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+mkdir -p dependencies/buf/validate
+curl https://raw.githubusercontent.com/bufbuild/protovalidate/refs/heads/main/proto/protovalidate/buf/validate/validate.proto > dependencies/buf/validate/validate.proto
+
 # move to the root dir of the package
 rd=$(git rev-parse --show-toplevel)
 
@@ -52,16 +55,19 @@ for lib_dir in "${lib_dirs[@]}"; do
 done
 cd $rd
 
-protoc \
-    --proto_path=. "document.proto" \
-    --proto_path=$(dirname $(dirname "$rd")) \
+proto_parent=$(dirname "$(dirname "$rd")")
+PROTO_PATH_ARGS=(
+  --proto_path=.
+  --proto_path="$proto_parent"
+  --proto_path="$rd/dependencies"
+)
+
+protoc "${PROTO_PATH_ARGS[@]}" "document.proto" \
     "--go_out=." --go_opt=paths=source_relative \
     --go-grpc_opt=require_unimplemented_servers=false \
     "--go-grpc_out=." --go-grpc_opt=paths=source_relative
 
-protoc \
-    --proto_path=. "document-grpc.proto" \
-    --proto_path=$(dirname $(dirname "$rd")) \
+protoc "${PROTO_PATH_ARGS[@]}" "document-grpc.proto" \
     "--go_out=." --go_opt=paths=source_relative \
     --go-grpc_opt=require_unimplemented_servers=false \
     "--go-grpc_out=." --go-grpc_opt=paths=source_relative
@@ -71,8 +77,7 @@ rm -rf node_modules
 npm i
 
 protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto \
-    --proto_path=. \
-    --proto_path=$(dirname $(dirname "$rd")) \
+    "${PROTO_PATH_ARGS[@]}" \
     --ts_proto_out=. \
     --ts_proto_opt=esModuleInterop=true \
     document.proto

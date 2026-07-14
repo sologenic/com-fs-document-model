@@ -7,48 +7,145 @@ option go_package = "github.com/sologenic/com-fs-document-model;document";
 import "google/protobuf/timestamp.proto";
 import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
 import "sologenic/com-fs-utils-lib/models/audit/audit.proto";
+import "buf/validate/validate.proto";
 
 message Document {
-    DocumentDetails Document = 1;
+    DocumentDetails Document = 1 [
+      (buf.validate.field).required = true
+    ];
     metadata.MetaData MetaData = 2; // Network is not to be assigned (documents are network agnostic)
     audit.Audit Audit = 3;
 }
 
 // Key format: OrganizationID_File.MD5SUM
 message DocumentDetails {
-    string OrganizationID = 1;
-    string Name = 2;
-    string Version = 3; // Latest version of the document
-    string Description = 4;
-    File File = 5;
+    string OrganizationID = 1 [
+      (buf.validate.field).string = {
+        uuid: true
+      }
+    ];
+    string Name = 2 [
+      (buf.validate.field).string = {
+        min_len: 1,
+        max_len: 128
+      }
+    ];
+    string Version = 3 [
+      (buf.validate.field).string = {
+        min_len: 1,
+        max_len: 32
+      }
+    ]; // Latest version of the document
+    string Description = 4 [
+      (buf.validate.field).ignore = IGNORE_IF_ZERO_VALUE,
+      (buf.validate.field).string = {
+        max_len: 2048
+      }
+    ];
+    File File = 5 [
+      (buf.validate.field).required = true
+    ];
     bool SignatureRequired = 6; // if false, the document is for display/reference only
-    DocumentStatus Status = 7;
+    DocumentStatus Status = 7 [
+      (buf.validate.field).enum.defined_only = true
+    ];
 }
 
 message File {
-    string Reference = 1; // The reference to the file
-    string Extension = 2;
-    optional string Name = 3; // User defined name of the file, used as a "description" and not to reference the file
-    string MD5SUM = 4; // MD5 checksum of the file for integrity verification
+    string Reference = 1 [
+      (buf.validate.field).string = {
+        min_len: 1,
+        max_len: 512
+      }
+    ]; // The reference to the file
+    string Extension = 2 [
+      (buf.validate.field).string = {
+        min_len: 1,
+        max_len: 16
+      }
+    ];
+    optional string Name = 3 [
+      (buf.validate.field).ignore = IGNORE_IF_ZERO_VALUE,
+      (buf.validate.field).string = {
+        max_len: 256
+      }
+    ]; // User defined name of the file, used as a "description" and not to reference the file
+    string MD5SUM = 4 [
+      (buf.validate.field).string = {
+        pattern: "^[a-fA-F0-9]{32}$"
+      }
+    ]; // MD5 checksum of the file for integrity verification
 }
 
 message Documents {
-    repeated Document Documents = 1; 
+    repeated Document Documents = 1;
     int32 Offset = 2;
 }
 
 // UserDocumentCompliance is embedded in User object to track user document compliance
 message UserDocumentCompliance {
-    repeated SignedDocument SignedDocuments = 1;
+    option (buf.validate.message).cel = {
+      id: "user_document_compliance.unique_file_md5sum"
+      message: "SignedDocuments contains duplicate FileMD5SUM"
+      expression: "this.SignedDocuments.map(d, d.FileMD5SUM).unique()"
+    };
+
+    repeated SignedDocument SignedDocuments = 1 [
+      (buf.validate.field).repeated = {
+        max_items: 128
+      }
+    ];
+}
+
+// SignedDocuments is the request body for batch sign
+message SignedDocuments {
+    option (buf.validate.message).cel = {
+      id: "signed_documents.unique_file_md5sum"
+      message: "SignedDocuments contains duplicate FileMD5SUM"
+      expression: "this.SignedDocuments.map(d, d.FileMD5SUM).unique()"
+    };
+
+    repeated SignedDocument SignedDocuments = 1 [
+      (buf.validate.field).repeated = {
+        min_items: 1,
+        max_items: 64
+      }
+    ];
 }
 
 message SignedDocument {
-    string Name = 1;
-    string SignedVersion = 2; // The version of the document that was signed. This may differ from the current/latest version.
-    DocumentState DocumentState = 3;
-    google.protobuf.Timestamp SignedAt = 4;
-    string FileMD5SUM = 5; // MD5 checksum of the file that was signed
-    string TXID = 6; // Transaction ID of the signed document (e.g. from the blockchain)
+    string Name = 1 [
+      (buf.validate.field).string = {
+        min_len: 1,
+        max_len: 128
+      }
+    ];
+    string SignedVersion = 2 [
+      (buf.validate.field).string = {
+        min_len: 1,
+        max_len: 32
+      }
+    ]; // The version of the document that was signed. This may differ from the current/latest version.
+    DocumentState DocumentState = 3 [
+      (buf.validate.field).enum = {
+        defined_only: true
+        not_in: [0]
+      }
+    ];
+    google.protobuf.Timestamp SignedAt = 4 [
+      (buf.validate.field).ignore = IGNORE_IF_ZERO_VALUE
+    ];
+    string FileMD5SUM = 5 [
+      (buf.validate.field).string = {
+        pattern: "^[a-fA-F0-9]{32}$"
+      }
+    ]; // MD5 checksum of the file that was signed
+    string TXID = 6 [
+      (buf.validate.field).ignore = IGNORE_IF_ZERO_VALUE,
+      (buf.validate.field).string = {
+        max_len: 128
+      }
+    ]; // Transaction ID of the signed document (e.g. from the blockchain)
 }
 
 enum DocumentStatus {
