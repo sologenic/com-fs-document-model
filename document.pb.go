@@ -593,14 +593,14 @@ const file_document_proto_rawDesc = "" +
 	"\x05_NameJ\x04\b\x02\x10\x03R\tExtension\"U\n" +
 	"\tDocuments\x120\n" +
 	"\tDocuments\x18\x01 \x03(\v2\x12.document.DocumentR\tDocuments\x12\x16\n" +
-	"\x06Offset\x18\x02 \x01(\x05R\x06Offset\"\x81\x02\n" +
+	"\x06Offset\x18\x02 \x01(\x05R\x06Offset\"\xff\x01\n" +
 	"\x16UserDocumentCompliance\x12M\n" +
-	"\x0fSignedDocuments\x18\x01 \x03(\v2\x18.document.SignedDocumentB\t\xbaH\x06\x92\x01\x03\x10\x80\x01R\x0fSignedDocuments:\x97\x01\xbaH\x93\x01\x1a\x90\x01\n" +
-	"+user_document_compliance.unique_file_md5sum\x12-SignedDocuments contains duplicate FileMD5SUM\x1a2this.SignedDocuments.map(d, d.FileMD5SUM).unique()\"\xf3\x01\n" +
+	"\x0fSignedDocuments\x18\x01 \x03(\v2\x18.document.SignedDocumentB\t\xbaH\x06\x92\x01\x03\x10\x80\x01R\x0fSignedDocuments:\x95\x01\xbaH\x91\x01\x1a\x8e\x01\n" +
+	"+user_document_compliance.unique_file_md5sum\x12+The list should not contain duplicate items\x1a2this.SignedDocuments.map(d, d.FileMD5SUM).unique()\"\xf1\x01\n" +
 	"\x0fSignedDocuments\x12N\n" +
 	"\x0fSignedDocuments\x18\x01 \x03(\v2\x18.document.SignedDocumentB\n" +
-	"\xbaH\a\x92\x01\x04\b\x01\x10@R\x0fSignedDocuments:\x8f\x01\xbaH\x8b\x01\x1a\x88\x01\n" +
-	"#signed_documents.unique_file_md5sum\x12-SignedDocuments contains duplicate FileMD5SUM\x1a2this.SignedDocuments.map(d, d.FileMD5SUM).unique()\"\xcf\x02\n" +
+	"\xbaH\a\x92\x01\x04\b\x01\x10@R\x0fSignedDocuments:\x8d\x01\xbaH\x89\x01\x1a\x86\x01\n" +
+	"#signed_documents.unique_file_md5sum\x12+The list should not contain duplicate items\x1a2this.SignedDocuments.map(d, d.FileMD5SUM).unique()\"\xcf\x02\n" +
 	"\x0eSignedDocument\x12\x1e\n" +
 	"\x04Name\x18\x01 \x01(\tB\n" +
 	"\xbaH\ar\x05\x10\x01\x18\x80\x01R\x04Name\x12/\n" +

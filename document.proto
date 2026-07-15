@@ -82,7 +82,7 @@ message Documents {
 message UserDocumentCompliance {
     option (buf.validate.message).cel = {
       id: "user_document_compliance.unique_file_md5sum"
-      message: "SignedDocuments contains duplicate FileMD5SUM"
+      message: "The list should not contain duplicate items"
       expression: "this.SignedDocuments.map(d, d.FileMD5SUM).unique()"
     };
 
@@ -97,7 +97,7 @@ message UserDocumentCompliance {
 message SignedDocuments {
     option (buf.validate.message).cel = {
       id: "signed_documents.unique_file_md5sum"
-      message: "SignedDocuments contains duplicate FileMD5SUM"
+      message: "The list should not contain duplicate items"
       expression: "this.SignedDocuments.map(d, d.FileMD5SUM).unique()"
     };
 
