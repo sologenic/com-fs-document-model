@@ -44,7 +44,6 @@ export interface DocumentDetails {
 export interface File {
     /** The reference to the file */
     Reference: string;
-    Extension: string;
     /** User defined name of the file, used as a "description" and not to reference the file */
     Name?: string | undefined;
     /** MD5 checksum of the file for integrity verification */
@@ -56,6 +55,10 @@ export interface Documents {
 }
 /** UserDocumentCompliance is embedded in User object to track user document compliance */
 export interface UserDocumentCompliance {
+    SignedDocuments: SignedDocument[];
+}
+/** SignedDocuments is the request body for batch sign */
+export interface SignedDocuments {
     SignedDocuments: SignedDocument[];
 }
 export interface SignedDocument {
@@ -82,7 +85,6 @@ export declare const Document: {
             Description?: string | undefined;
             File?: {
                 Reference?: string | undefined;
-                Extension?: string | undefined;
                 Name?: string | undefined;
                 MD5SUM?: string | undefined;
             } | undefined;
@@ -108,7 +110,6 @@ export declare const Document: {
             Description?: string | undefined;
             File?: {
                 Reference?: string | undefined;
-                Extension?: string | undefined;
                 Name?: string | undefined;
                 MD5SUM?: string | undefined;
             } | undefined;
@@ -121,12 +122,10 @@ export declare const Document: {
             Description?: string | undefined;
             File?: ({
                 Reference?: string | undefined;
-                Extension?: string | undefined;
                 Name?: string | undefined;
                 MD5SUM?: string | undefined;
             } & {
                 Reference?: string | undefined;
-                Extension?: string | undefined;
                 Name?: string | undefined;
                 MD5SUM?: string | undefined;
             } & { [K in Exclude<keyof I["Document"]["File"], keyof File>]: never; }) | undefined;
@@ -162,7 +161,6 @@ export declare const Document: {
             Description?: string | undefined;
             File?: {
                 Reference?: string | undefined;
-                Extension?: string | undefined;
                 Name?: string | undefined;
                 MD5SUM?: string | undefined;
             } | undefined;
@@ -188,7 +186,6 @@ export declare const Document: {
             Description?: string | undefined;
             File?: {
                 Reference?: string | undefined;
-                Extension?: string | undefined;
                 Name?: string | undefined;
                 MD5SUM?: string | undefined;
             } | undefined;
@@ -201,12 +198,10 @@ export declare const Document: {
             Description?: string | undefined;
             File?: ({
                 Reference?: string | undefined;
-                Extension?: string | undefined;
                 Name?: string | undefined;
                 MD5SUM?: string | undefined;
             } & {
                 Reference?: string | undefined;
-                Extension?: string | undefined;
                 Name?: string | undefined;
                 MD5SUM?: string | undefined;
             } & { [K_5 in Exclude<keyof I_1["Document"]["File"], keyof File>]: never; }) | undefined;
@@ -247,7 +242,6 @@ export declare const DocumentDetails: {
         Description?: string | undefined;
         File?: {
             Reference?: string | undefined;
-            Extension?: string | undefined;
             Name?: string | undefined;
             MD5SUM?: string | undefined;
         } | undefined;
@@ -260,12 +254,10 @@ export declare const DocumentDetails: {
         Description?: string | undefined;
         File?: ({
             Reference?: string | undefined;
-            Extension?: string | undefined;
             Name?: string | undefined;
             MD5SUM?: string | undefined;
         } & {
             Reference?: string | undefined;
-            Extension?: string | undefined;
             Name?: string | undefined;
             MD5SUM?: string | undefined;
         } & { [K in Exclude<keyof I["File"], keyof File>]: never; }) | undefined;
@@ -279,7 +271,6 @@ export declare const DocumentDetails: {
         Description?: string | undefined;
         File?: {
             Reference?: string | undefined;
-            Extension?: string | undefined;
             Name?: string | undefined;
             MD5SUM?: string | undefined;
         } | undefined;
@@ -292,12 +283,10 @@ export declare const DocumentDetails: {
         Description?: string | undefined;
         File?: ({
             Reference?: string | undefined;
-            Extension?: string | undefined;
             Name?: string | undefined;
             MD5SUM?: string | undefined;
         } & {
             Reference?: string | undefined;
-            Extension?: string | undefined;
             Name?: string | undefined;
             MD5SUM?: string | undefined;
         } & { [K_2 in Exclude<keyof I_1["File"], keyof File>]: never; }) | undefined;
@@ -312,23 +301,19 @@ export declare const File: {
     toJSON(message: File): unknown;
     create<I extends {
         Reference?: string | undefined;
-        Extension?: string | undefined;
         Name?: string | undefined;
         MD5SUM?: string | undefined;
     } & {
         Reference?: string | undefined;
-        Extension?: string | undefined;
         Name?: string | undefined;
         MD5SUM?: string | undefined;
     } & { [K in Exclude<keyof I, keyof File>]: never; }>(base?: I | undefined): File;
     fromPartial<I_1 extends {
         Reference?: string | undefined;
-        Extension?: string | undefined;
         Name?: string | undefined;
         MD5SUM?: string | undefined;
     } & {
         Reference?: string | undefined;
-        Extension?: string | undefined;
         Name?: string | undefined;
         MD5SUM?: string | undefined;
     } & { [K_1 in Exclude<keyof I_1, keyof File>]: never; }>(object: I_1): File;
@@ -347,7 +332,6 @@ export declare const Documents: {
                 Description?: string | undefined;
                 File?: {
                     Reference?: string | undefined;
-                    Extension?: string | undefined;
                     Name?: string | undefined;
                     MD5SUM?: string | undefined;
                 } | undefined;
@@ -376,7 +360,6 @@ export declare const Documents: {
                 Description?: string | undefined;
                 File?: {
                     Reference?: string | undefined;
-                    Extension?: string | undefined;
                     Name?: string | undefined;
                     MD5SUM?: string | undefined;
                 } | undefined;
@@ -402,7 +385,6 @@ export declare const Documents: {
                 Description?: string | undefined;
                 File?: {
                     Reference?: string | undefined;
-                    Extension?: string | undefined;
                     Name?: string | undefined;
                     MD5SUM?: string | undefined;
                 } | undefined;
@@ -428,7 +410,6 @@ export declare const Documents: {
                 Description?: string | undefined;
                 File?: {
                     Reference?: string | undefined;
-                    Extension?: string | undefined;
                     Name?: string | undefined;
                     MD5SUM?: string | undefined;
                 } | undefined;
@@ -441,12 +422,10 @@ export declare const Documents: {
                 Description?: string | undefined;
                 File?: ({
                     Reference?: string | undefined;
-                    Extension?: string | undefined;
                     Name?: string | undefined;
                     MD5SUM?: string | undefined;
                 } & {
                     Reference?: string | undefined;
-                    Extension?: string | undefined;
                     Name?: string | undefined;
                     MD5SUM?: string | undefined;
                 } & { [K in Exclude<keyof I["Documents"][number]["Document"]["File"], keyof File>]: never; }) | undefined;
@@ -481,7 +460,6 @@ export declare const Documents: {
                 Description?: string | undefined;
                 File?: {
                     Reference?: string | undefined;
-                    Extension?: string | undefined;
                     Name?: string | undefined;
                     MD5SUM?: string | undefined;
                 } | undefined;
@@ -511,7 +489,6 @@ export declare const Documents: {
                 Description?: string | undefined;
                 File?: {
                     Reference?: string | undefined;
-                    Extension?: string | undefined;
                     Name?: string | undefined;
                     MD5SUM?: string | undefined;
                 } | undefined;
@@ -540,7 +517,6 @@ export declare const Documents: {
                 Description?: string | undefined;
                 File?: {
                     Reference?: string | undefined;
-                    Extension?: string | undefined;
                     Name?: string | undefined;
                     MD5SUM?: string | undefined;
                 } | undefined;
@@ -566,7 +542,6 @@ export declare const Documents: {
                 Description?: string | undefined;
                 File?: {
                     Reference?: string | undefined;
-                    Extension?: string | undefined;
                     Name?: string | undefined;
                     MD5SUM?: string | undefined;
                 } | undefined;
@@ -592,7 +567,6 @@ export declare const Documents: {
                 Description?: string | undefined;
                 File?: {
                     Reference?: string | undefined;
-                    Extension?: string | undefined;
                     Name?: string | undefined;
                     MD5SUM?: string | undefined;
                 } | undefined;
@@ -605,12 +579,10 @@ export declare const Documents: {
                 Description?: string | undefined;
                 File?: ({
                     Reference?: string | undefined;
-                    Extension?: string | undefined;
                     Name?: string | undefined;
                     MD5SUM?: string | undefined;
                 } & {
                     Reference?: string | undefined;
-                    Extension?: string | undefined;
                     Name?: string | undefined;
                     MD5SUM?: string | undefined;
                 } & { [K_7 in Exclude<keyof I_1["Documents"][number]["Document"]["File"], keyof File>]: never; }) | undefined;
@@ -645,7 +617,6 @@ export declare const Documents: {
                 Description?: string | undefined;
                 File?: {
                     Reference?: string | undefined;
-                    Extension?: string | undefined;
                     Name?: string | undefined;
                     MD5SUM?: string | undefined;
                 } | undefined;
@@ -752,6 +723,92 @@ export declare const UserDocumentCompliance: {
             TXID?: string | undefined;
         }[]>]: never; }) | undefined;
     } & { [K_5 in Exclude<keyof I_1, "SignedDocuments">]: never; }>(object: I_1): UserDocumentCompliance;
+};
+export declare const SignedDocuments: {
+    encode(message: SignedDocuments, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): SignedDocuments;
+    fromJSON(object: any): SignedDocuments;
+    toJSON(message: SignedDocuments): unknown;
+    create<I extends {
+        SignedDocuments?: {
+            Name?: string | undefined;
+            SignedVersion?: string | undefined;
+            DocumentState?: DocumentState | undefined;
+            SignedAt?: Date | undefined;
+            FileMD5SUM?: string | undefined;
+            TXID?: string | undefined;
+        }[] | undefined;
+    } & {
+        SignedDocuments?: ({
+            Name?: string | undefined;
+            SignedVersion?: string | undefined;
+            DocumentState?: DocumentState | undefined;
+            SignedAt?: Date | undefined;
+            FileMD5SUM?: string | undefined;
+            TXID?: string | undefined;
+        }[] & ({
+            Name?: string | undefined;
+            SignedVersion?: string | undefined;
+            DocumentState?: DocumentState | undefined;
+            SignedAt?: Date | undefined;
+            FileMD5SUM?: string | undefined;
+            TXID?: string | undefined;
+        } & {
+            Name?: string | undefined;
+            SignedVersion?: string | undefined;
+            DocumentState?: DocumentState | undefined;
+            SignedAt?: Date | undefined;
+            FileMD5SUM?: string | undefined;
+            TXID?: string | undefined;
+        } & { [K in Exclude<keyof I["SignedDocuments"][number], keyof SignedDocument>]: never; })[] & { [K_1 in Exclude<keyof I["SignedDocuments"], keyof {
+            Name?: string | undefined;
+            SignedVersion?: string | undefined;
+            DocumentState?: DocumentState | undefined;
+            SignedAt?: Date | undefined;
+            FileMD5SUM?: string | undefined;
+            TXID?: string | undefined;
+        }[]>]: never; }) | undefined;
+    } & { [K_2 in Exclude<keyof I, "SignedDocuments">]: never; }>(base?: I | undefined): SignedDocuments;
+    fromPartial<I_1 extends {
+        SignedDocuments?: {
+            Name?: string | undefined;
+            SignedVersion?: string | undefined;
+            DocumentState?: DocumentState | undefined;
+            SignedAt?: Date | undefined;
+            FileMD5SUM?: string | undefined;
+            TXID?: string | undefined;
+        }[] | undefined;
+    } & {
+        SignedDocuments?: ({
+            Name?: string | undefined;
+            SignedVersion?: string | undefined;
+            DocumentState?: DocumentState | undefined;
+            SignedAt?: Date | undefined;
+            FileMD5SUM?: string | undefined;
+            TXID?: string | undefined;
+        }[] & ({
+            Name?: string | undefined;
+            SignedVersion?: string | undefined;
+            DocumentState?: DocumentState | undefined;
+            SignedAt?: Date | undefined;
+            FileMD5SUM?: string | undefined;
+            TXID?: string | undefined;
+        } & {
+            Name?: string | undefined;
+            SignedVersion?: string | undefined;
+            DocumentState?: DocumentState | undefined;
+            SignedAt?: Date | undefined;
+            FileMD5SUM?: string | undefined;
+            TXID?: string | undefined;
+        } & { [K_3 in Exclude<keyof I_1["SignedDocuments"][number], keyof SignedDocument>]: never; })[] & { [K_4 in Exclude<keyof I_1["SignedDocuments"], keyof {
+            Name?: string | undefined;
+            SignedVersion?: string | undefined;
+            DocumentState?: DocumentState | undefined;
+            SignedAt?: Date | undefined;
+            FileMD5SUM?: string | undefined;
+            TXID?: string | undefined;
+        }[]>]: never; }) | undefined;
+    } & { [K_5 in Exclude<keyof I_1, "SignedDocuments">]: never; }>(object: I_1): SignedDocuments;
 };
 export declare const SignedDocument: {
     encode(message: SignedDocument, writer?: _m0.Writer): _m0.Writer;
