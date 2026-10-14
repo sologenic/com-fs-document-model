@@ -4,30 +4,38 @@ go 1.27.1
 
 require (
 	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.11-20260709200747-435963d16310.1
-	github.com/sologenic/com-fs-utils-internal-lib/go/grpc-client v0.0.0-20260429144456-e78936df6303
-	github.com/sologenic/com-fs-utils-lib/models/audit v0.0.0-20260501113306-8b02db1b65e4
-	github.com/sologenic/com-fs-utils-lib/models/metadata v0.0.0-20260501113306-8b02db1b65e4
-	google.golang.org/grpc v1.71.1
+	github.com/sologenic/com-fs-utils-internal-lib/go/grpc-client v0.0.0-20261014184121-6933fe0a39b9
+	github.com/sologenic/com-fs-utils-lib/models/audit v0.0.0-20260921113010-b0e6f3617f70
+	github.com/sologenic/com-fs-utils-lib/models/metadata v0.0.0-20260921113010-b0e6f3617f70
+	google.golang.org/grpc v1.83.2
 	google.golang.org/protobuf v1.36.11
 )
 
 require (
-	cloud.google.com/go/compute/metadata v0.6.0 // indirect
-	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
-	github.com/golang/protobuf v1.5.4 // indirect
-	github.com/google/s2a-go v0.1.7 // indirect
-	github.com/googleapis/enterprise-certificate-proxy v0.3.2 // indirect
-	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.19 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
-	github.com/rs/zerolog v1.33.0 // indirect
-	github.com/sologenic/com-fs-utils-internal-lib/go/logger v0.0.0-20260429144456-e78936df6303 // indirect
-	go.opencensus.io v0.24.0 // indirect
-	golang.org/x/crypto v0.32.0 // indirect
-	golang.org/x/net v0.34.0 // indirect
-	golang.org/x/oauth2 v0.25.0 // indirect
-	golang.org/x/sys v0.29.0 // indirect
-	golang.org/x/text v0.21.0 // indirect
-	google.golang.org/api v0.149.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20250115164207-1a7da9e5054f // indirect
+	cloud.google.com/go/auth v0.23.0 // indirect
+	cloud.google.com/go/auth/oauth2adapt v0.2.8 // indirect
+	cloud.google.com/go/compute/metadata v0.9.0 // indirect
+	github.com/cespare/xxhash/v2 v2.3.0 // indirect
+	github.com/felixge/httpsnoop v1.1.0 // indirect
+	github.com/go-logr/logr v1.4.4 // indirect
+	github.com/go-logr/stdr v1.2.2 // indirect
+	github.com/google/s2a-go v0.1.9 // indirect
+	github.com/googleapis/enterprise-certificate-proxy v0.3.20 // indirect
+	github.com/googleapis/gax-go/v2 v2.23.0 // indirect
+	github.com/mattn/go-colorable v0.1.15 // indirect
+	github.com/mattn/go-isatty v0.0.23 // indirect
+	github.com/rs/zerolog v1.35.1 // indirect
+	github.com/sologenic/com-fs-utils-internal-lib/go/logger v0.0.0-20261014184121-6933fe0a39b9 // indirect
+	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.69.0 // indirect
+	go.opentelemetry.io/otel v1.44.0 // indirect
+	go.opentelemetry.io/otel/metric v1.44.0 // indirect
+	go.opentelemetry.io/otel/trace v1.44.0 // indirect
+	golang.org/x/crypto v0.55.0 // indirect
+	golang.org/x/net v0.58.0 // indirect
+	golang.org/x/oauth2 v0.36.0 // indirect
+	golang.org/x/sys v0.47.0 // indirect
+	golang.org/x/text v0.41.0 // indirect
+	google.golang.org/api v0.293.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260807164820-c8921c73eeea // indirect
 )
