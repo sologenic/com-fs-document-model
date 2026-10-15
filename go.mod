@@ -3,12 +3,12 @@ module github.com/sologenic/com-fs-document-model
 go 1.27.1
 
 require (
-	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.11-20260709200747-435963d16310.1
-	github.com/sologenic/com-fs-utils-internal-lib/go/grpc-client v0.0.0-20261014184121-6933fe0a39b9
-	github.com/sologenic/com-fs-utils-lib/models/audit v0.0.0-20260921113010-b0e6f3617f70
-	github.com/sologenic/com-fs-utils-lib/models/metadata v0.0.0-20260921113010-b0e6f3617f70
+	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.12-20260825204119-511051f7f437.2
+	github.com/sologenic/com-fs-utils-internal-lib/go/grpc-client v0.0.0-20261015114510-759dd7e97daf
+	github.com/sologenic/com-fs-utils-lib/models/audit v0.0.0-20261015114509-385fbabbb477
+	github.com/sologenic/com-fs-utils-lib/models/metadata v0.0.0-20261015114509-385fbabbb477
 	google.golang.org/grpc v1.83.2
-	google.golang.org/protobuf v1.36.11
+	google.golang.org/protobuf v1.36.12
 )
 
 require (
@@ -25,7 +25,7 @@ require (
 	github.com/mattn/go-colorable v0.1.15 // indirect
 	github.com/mattn/go-isatty v0.0.23 // indirect
 	github.com/rs/zerolog v1.35.1 // indirect
-	github.com/sologenic/com-fs-utils-internal-lib/go/logger v0.0.0-20261014184121-6933fe0a39b9 // indirect
+	github.com/sologenic/com-fs-utils-internal-lib/go/logger v0.0.0-20261015114510-759dd7e97daf // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.69.0 // indirect
 	go.opentelemetry.io/otel v1.44.0 // indirect
